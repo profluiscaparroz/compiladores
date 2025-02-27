@@ -1,46 +1,46 @@
 #include <stdio.h>
 #include <string.h>
 
-// Função para simular o AFD
-int isAccepted(char *word) {
-    int state = 0; // Começa no estado q0
-    int len = strlen(word);
+// Função para verificar se a string pertence à linguagem a^n b^n
+int verifica_anbn(const char *str) {
+    int count_a = 0, count_b = 0;
+    int i = 0, estado = 0;
 
-    for (int i = 0; i < len; i++) {
-        char c = word[i];
-
-        // Transições baseadas no estado atual e no símbolo de entrada
-        if (state == 0) {
-            if (c == 'a') {
-                state = 0; // Fica em q0 com 'a'
-            } else if (c == 'b') {
-                state = 1; // Vai para q1 com 'b'
+    // Percorre a string verificando a sequência correta
+    while (str[i] != '\0') {
+        if (estado == 0) {
+            if (str[i] == 'a') {
+                count_a++;
+            } else if (str[i] == 'b') {
+                estado = 1; // Troca para estado de 'b's
+                count_b++;
             } else {
-                return 0; // Símbolo inválido
+                return 0; // Se encontrar outro caractere, rejeita
             }
-        } else if (state == 1) {
-            if (c == 'a' || c == 'b') {
-                state = 1; // Fica em q1 com 'a' ou 'b'
+        } else if (estado == 1) {
+            if (str[i] == 'b') {
+                count_b++;
             } else {
-                return 0; // Símbolo inválido
+                return 0; // Se encontrar outro caractere, rejeita
             }
         }
+        i++;
     }
 
-    // A palavra é aceita se terminar em um estado de aceitação (q1)
-    return (state == 1);
+    // A string é aceita se count_a == count_b e pelo menos um 'a' e um 'b' existirem
+    return (count_a == count_b && count_a > 0);
 }
 
 int main() {
-    char word[100];
+    // Testes com diferentes strings
+    char *testes[] = { "ab", "aabb", "aaabbb", "aaaabbbb", "abb", "ba", "aabbb", "aaaaabb", "bbb", "" };
+    int num_testes = sizeof(testes) / sizeof(testes[0]);
 
-    printf("Digite uma palavra para verificar se é aceita pelo AFD: ");
-    scanf("%s", word);
-
-    if (isAccepted(word)) {
-        printf("A palavra '%s' é aceita pelo AFD.\n", word);
-    } else {
-        printf("A palavra '%s' não é aceita pelo AFD.\n", word);
+    for (int i = 0; i < num_testes; i++) {
+        if (verifica_anbn(testes[i]))
+            printf("A string \"%s\" pertence à linguagem a^n b^n\n", testes[i]);
+        else
+            printf("A string \"%s\" NÃO pertence à linguagem a^n b^n\n", testes[i]);
     }
 
     return 0;
