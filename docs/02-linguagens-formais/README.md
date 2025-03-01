@@ -4,11 +4,11 @@ Foi proposta pelo linguista **Noam Chomsky** em 1956 e é composta por quatro n�
 
 ## Sumário
 
-[Resumo dos tipos de Chomsky](#resumo-da-hierarquia-de-chomsky)
-[Linguagem 3](#linguagens-regulares-tipo-3-na-hierarquia-de-chomsky)
-[Linguagem 2](#linguagens-livres-de-contexto-tipo-2-na-hierarquia-de-chomsky)
-[Linguagem 1](#gramáticas-sensíveis-ao-contexto-tipo-1--hierarquia-de-chomsky)
-[Linguagem 0](#gramáticas-recursivamente-enumeráveis-tipo-0--hierarquia-de-chomsky)
+- [Resumo dos tipos de Chomsky](#resumo-da-hierarquia-de-chomsky)
+- [Linguagem 3](#linguagens-regulares-tipo-3-na-hierarquia-de-chomsky)
+- [Linguagem 2](#linguagens-livres-de-contexto-tipo-2-na-hierarquia-de-chomsky)
+- [Linguagem 1](#gramáticas-sensíveis-ao-contexto-tipo-1--hierarquia-de-chomsky)
+- [Linguagem 0](#gramáticas-recursivamente-enumeráveis-tipo-0--hierarquia-de-chomsky)
 
 ---
 
