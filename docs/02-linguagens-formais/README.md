@@ -1,4 +1,6 @@
-A **Hierarquia de Chomsky** é um modelo teórico que classifica as linguagens formais em diferentes tipos, baseado na **complexidade das regras gramaticais** que as definem. Ela foi proposta pelo linguista **Noam Chomsky** em 1956 e é composta por quatro níveis.
+# Introdução
+A **Hierarquia de Chomsky** é um modelo teórico que classifica as linguagens formais em diferentes tipos, baseado na **complexidade das regras gramaticais** que as definem. 
+Foi proposta pelo linguista **Noam Chomsky** em 1956 e é composta por quatro níveis.
 
 ## Sumário
 
@@ -10,10 +12,10 @@ A **Hierarquia de Chomsky** é um modelo teórico que classifica as linguagens f
 
 ---
 
-# Resumo da hierarquia de Chomsky
+## Resumo da hierarquia de Chomsky
 
-## **1. Linguagens Regulares (Tipo 3)**
-###  Características:
+### **1. Linguagens Regulares (Tipo 3)**
+####  Características:
 - São as mais simples da hierarquia.
 - Podem ser reconhecidas por **autômatos finitos** (determinísticos ou não).
 - Definidas por **expressões regulares**.
@@ -22,10 +24,10 @@ A **Hierarquia de Chomsky** é um modelo teórico que classifica as linguagens f
   - **Produção Esquerda:** `A → Ba` ou `A → a`
   - `A` e `B` são variáveis, `a` é um terminal.
 
-###  Exemplo:
+####  Exemplo:
 Imagine que queremos definir uma linguagem que aceita palavras formadas pela repetição de `'a'` seguidas por `'b'` (como `"aabb"`, `"ab"`, `"aaaabbb"`, etc.).
 
-#### **Gramática Regular**:
+##### **Gramática Regular**:
 ```
 S → aS | bA
 A → bA | ε
@@ -34,7 +36,7 @@ A → bA | ε
 - `bA` garante que ao trocar de `a` para `b`, apenas `b` pode continuar.
 - `A → bA | ε` permite que terminemos a sequência de `b`.
 
-#### **Autômato Finito** (Diagrama Simples):
+##### **Autômato Finito** (Diagrama Simples):
 ```
 (estado inicial) → (q0) --a--> (q0) --b--> (q1) --b--> (q1) → (estado final)
 ```
@@ -43,18 +45,18 @@ A → bA | ε
 
 ---
 
-## **2. Linguagens Livres de Contexto (Tipo 2)**
-###  Características:
+### **2. Linguagens Livres de Contexto (Tipo 2)**
+####  Características:
 - São mais complexas que as regulares.
 - São reconhecidas por **autômatos de pilha**.
 - Definidas por **gramáticas livres de contexto (GLC)**.
 - As regras devem ter a forma:
   - `A → α` (onde `A` é uma variável e `α` pode ser qualquer sequência de variáveis e terminais).
 
-###  Exemplo:
+####  Exemplo:
 Considere uma linguagem que aceita **palíndromos** formados por `'a'` e `'b'` (como `"aba"`, `"abba"`, `"aaabbaaa"`).
 
-#### **Gramática Livre de Contexto**:
+##### **Gramática Livre de Contexto**:
 ```
 S → aSa | bSb | a | b | ε
 ```
@@ -66,18 +68,18 @@ S → aSa | bSb | a | b | ε
 
 ---
 
-## **3. Linguagens Sensíveis ao Contexto (Tipo 1)**
-###  Características:
+### **3. Linguagens Sensíveis ao Contexto (Tipo 1)**
+####  Características:
 - São mais poderosas que as livres de contexto.
 - São reconhecidas por **máquinas de Turing lineares**.
 - As regras podem ter **contexto**, ou seja, dependem do que está ao redor do símbolo sendo substituído.
 - A gramática segue a forma:
   - `αAβ → αγβ` (onde `α`, `β` e `γ` podem ser cadeias de símbolos e `A` é uma variável).
 
-###  Exemplo:
+####  Exemplo:
 Linguagem que aceita cadeias do formato `"a^n b^n c^n"` (quantidade igual de `'a'`, `'b'` e `'c'`, como `"aaabbbccc"`).
 
-#### **Gramática Sensível ao Contexto**:
+##### **Gramática Sensível ao Contexto**:
 ```
 S → aSBC | abc
 CB → BC
@@ -93,18 +95,18 @@ C → c
 
 ---
 
-## **4. Linguagens Recursivamente Enumeráveis (Tipo 0)**
-###  Características:
+### **4. Linguagens Recursivamente Enumeráveis (Tipo 0)**
+####  Características:
 - São as mais gerais e poderosas.
 - Podem ser reconhecidas por uma **máquina de Turing**.
 - As regras podem ser **quaisquer substituições** da forma:
   - `α → β` (onde `α` e `β` podem ser cadeias arbitrárias de variáveis e terminais).
 - Esse tipo de linguagem inclui **problemas indecidíveis**, ou seja, que não podem ser resolvidos de forma automática para todos os casos.
 
-###  Exemplo:
+####  Exemplo:
 Linguagem que verifica se uma **expressão matemática** está correta (`2+3*4` é válido, mas `+2*` não).
 
-#### **Gramática Recursivamente Enumerável**:
+##### **Gramática Recursivamente Enumerável**:
 ```
 E → E+E | E*E | (E) | número
 número → 0 | 1 | 2 | ... | 9
@@ -117,7 +119,7 @@ número → 0 | 1 | 2 | ... | 9
 
 ---
 
-## **Resumo da Hierarquia de Chomsky**  
+### **Resumo da Hierarquia de Chomsky**  
 | **Tipo** | **Nome** | **Modelo de Reconhecimento** | **Exemplo** |
 |----------|---------|---------------------------|------------|
 | **0** | Recursivamente Enumeráveis | Máquina de Turing | Expressões matemáticas |
@@ -130,6 +132,7 @@ número → 0 | 1 | 2 | ... | 9
 A **Hierarquia de Chomsky** organiza as linguagens formais de forma crescente em poder expressivo.  
  **Quanto maior o nível, mais difícil é analisar a linguagem, mas maior a capacidade de expressão.**  
  **Linguagens de programação geralmente pertencem ao nível das livres de contexto, mas possuem restrições que podem exigir linguagens sensíveis ao contexto.**  
+ 
 
 # **Linguagens Regulares (Tipo 3) na Hierarquia de Chomsky**  
 
@@ -137,7 +140,7 @@ As **linguagens regulares** são o tipo mais simples na **Hierarquia de Chomsky*
 
 ---
 
-## ** Características das Linguagens Regulares**  
+### **Características das Linguagens Regulares**  
 
 - **São definidas por gramáticas regulares**, que possuem regras de produção restritas.  
 - **Podem ser representadas por expressões regulares**.  
@@ -146,7 +149,7 @@ As **linguagens regulares** são o tipo mais simples na **Hierarquia de Chomsky*
 
 ---
 
-## ** Gramáticas Regulares**  
+### **Gramáticas Regulares**  
 
 As gramáticas regulares seguem regras específicas para as suas produções:  
 
@@ -168,7 +171,7 @@ As gramáticas regulares seguem regras específicas para as suas produções:
 
 ---
 
-## ** Exemplo 1: Uma Linguagem de Palavras Simples**  
+## **Exemplo 1: Uma Linguagem de Palavras Simples**  
 
  **Objetivo**: Criar uma linguagem que aceite palavras que começam com `'a'` e terminam com `'b'`.  
 
@@ -203,7 +206,7 @@ Podemos desenhar um **autômato finito determinístico (AFD)** para reconhecer e
 
 ---
 
-## ** Exemplo 2: Identificadores de Variáveis**  
+## **Exemplo 2: Identificadores de Variáveis**  
 
  **Objetivo**: Criar uma linguagem que aceite identificadores válidos para uma linguagem de programação.  
 
@@ -234,7 +237,7 @@ A mesma linguagem pode ser expressa por uma **expressão regular**:
 
 ---
 
-## ** Exemplo 3: Números Binários Pares**  
+## **Exemplo 3: Números Binários Pares**  
 
  **Objetivo**: Criar uma linguagem que aceite números binários terminando em `0`.  
 
@@ -257,7 +260,7 @@ S → 0 | 1S0
 
 ---
 
-## ** Limitações das Linguagens Regulares**  
+## **Limitações das Linguagens Regulares**  
 
 Apesar de serem poderosas, as **linguagens regulares não conseguem expressar todas as linguagens possíveis**.  
 
@@ -271,7 +274,7 @@ Exemplo: A linguagem `"a^n b^n"` (quantidade igual de `'a'` e `'b'`, como `"aabb
 
 ---
 
-## ** Aplicações das Linguagens Regulares**  
+## **Aplicações das Linguagens Regulares**  
 
  **Compiladores**:  
 - A **análise léxica** de um compilador usa **expressões regulares** e **autômatos finitos** para reconhecer tokens (palavras-chave, identificadores, operadores, etc.).  
@@ -302,10 +305,10 @@ Aqui está um exemplo **em C** que implementa um reconhecedor de uma linguagem *
 
 ---
 
-### ** Linguagem Regular do Tipo 3**
+### **Linguagem Regular do Tipo 3**
 Vamos definir a seguinte linguagem:  
 
-\[L = \{ a^n b^n \ | \ n \geq 1 \}\]
+$L = \{ a^n b^n \ | \ n \geq 1 \}$
 
 Ou seja, a linguagem aceita apenas cadeias onde **todos os `a`s vêm antes dos `b`s** e o número de `a`s deve ser igual ao número de `b`s.
 
@@ -316,11 +319,11 @@ Ou seja, a linguagem aceita apenas cadeias onde **todos os `a`s vêm antes dos `
 ✘ `"abb"`, `"ba"`, `"aabbb"`, `"aaaaabb"`  
 
 A gramática **regular** para essa linguagem pode ser escrita assim:
-\[S \to aS \ | \ b\]
+$S \to aS \ | \ b$
 
 ---
 
-### ** Código em C**
+### **Código em C**
 O código abaixo verifica se a string pertence à linguagem $a^n b^n$, seguindo a gramática regular do Tipo 3:
 
 ```c
@@ -375,7 +378,7 @@ int main() {
 
 ---
 
-### ** Exemplo de Saída**
+### **Exemplo de Saída**
 ```
 A string "ab" pertence à linguagem a^n b^n
 A string "aabb" pertence à linguagem a^n b^n
@@ -391,14 +394,14 @@ A string "" NÃO pertence à linguagem a^n b^n
 
 ---
 
-### ** Explicação**
+### **Explicação**
  **O código verifica se a string contém somente `a`s seguidos de `b`s.**  
  **Conta o número de `a`s e `b`s e verifica se são iguais.**  
  **Rejeita strings que tenham `b`s antes dos `a`s ou números diferentes de `a`s e `b`s.**  
 
 ---
 
-### **  Resumo**
+### **Resumo**
  O programa **simula um autômato finito** que aceita a linguagem **regular  a^n b^n$**.  
  **Segue a gramática regular do Tipo 3** $S \to aS \ | \ b$.  
  **Pode ser adaptado para outras linguagens regulares**, como $(ab)^n$ ou $(aa|bb)^n$.  
@@ -410,7 +413,7 @@ As **linguagens livres de contexto (LLC)** formam a **segunda camada da Hierarqu
 
 ---
 
-## ** Características das Linguagens Livres de Contexto**  
+## **Características das Linguagens Livres de Contexto**  
 
 - **São definidas por gramáticas livres de contexto (GLC)**.  
 - **Podem ser reconhecidas por autômatos de pilha (PDA - Pushdown Automata)**.  
@@ -419,7 +422,7 @@ As **linguagens livres de contexto (LLC)** formam a **segunda camada da Hierarqu
 
 ---
 
-## ** Gramáticas Livres de Contexto (GLC)**  
+## **Gramáticas Livres de Contexto (GLC)**  
 
 Uma gramática livre de contexto é definida por **regras de produção** da forma:  
 
@@ -434,7 +437,7 @@ Onde:
 
 ---
 
-## ** Exemplo 1: Linguagem de Parênteses Bem Formados**  
+## **Exemplo 1: Linguagem de Parênteses Bem Formados**  
 
  **Objetivo**: Criar uma linguagem que aceita expressões com **parênteses aninhados corretamente**.  
 
@@ -462,7 +465,7 @@ S → (S)S | ε
 
 ---
 
-## ** Exemplo 2: Linguagem de Palavras `a^n b^n`**  
+## **Exemplo 2: Linguagem de Palavras `a^n b^n`**  
 
  **Objetivo**: Criar uma linguagem que aceita palavras com um número **igual de `'a'` e `'b'`**.  
 
@@ -490,7 +493,7 @@ S → aSb | ε
 
 ---
 
-## ** Exemplo 3: Expressões Matemáticas Simples**  
+## **Exemplo 3: Expressões Matemáticas Simples**  
 
  **Objetivo**: Criar uma linguagem que reconhece expressões matemáticas simples, como `"1+2"`, `"3*(4+5)"`.  
 
@@ -528,7 +531,7 @@ F → (E) | num
 
 ---
 
-## ** Diferença entre Linguagens Regulares e Linguagens Livres de Contexto**  
+## **Diferença entre Linguagens Regulares e Linguagens Livres de Contexto**  
 
 | **Característica**         | **Linguagens Regulares (Tipo 3)** | **Linguagens Livres de Contexto (Tipo 2)** |
 |---------------------------|---------------------------------|----------------------------------|
@@ -539,7 +542,7 @@ F → (E) | num
 
 ---
 
-## ** Aplicações das Linguagens Livres de Contexto**  
+## **Aplicações das Linguagens Livres de Contexto**  
 
  **Compiladores**:  
 - A **análise sintática** em compiladores usa gramáticas livres de contexto para estruturar programas.  
@@ -555,7 +558,7 @@ F → (E) | num
 
 ---
 
-## ** Conclusão**  
+## **Conclusão**  
 
 As **linguagens livres de contexto** (Tipo 2 da Hierarquia de Chomsky) são **mais poderosas** que as linguagens regulares, pois podem representar **estruturas recursivas e contagens**. Elas são essenciais para **compiladores, linguagens de programação e linguística computacional**.  
 
@@ -565,14 +568,14 @@ As **linguagens livres de contexto** (Tipo 2 da Hierarquia de Chomsky) são **ma
  Fundamentais para **análise sintática** em compiladores.  
  **Não conseguem lidar com certas linguagens mais complexas**, como `'a^n b^n c^n'` (requer gramáticas sensíveis ao contexto - Tipo 1).  
 
-### ** Implementação de um Reconhecedor para uma Linguagem Livre de Contexto (Tipo 2) em C**
+### **Implementação de um Reconhecedor para uma Linguagem Livre de Contexto (Tipo 2) em C**
 A **Gramática do Tipo 2** (Linguagens Livres de Contexto) na **Hierarquia de Chomsky** pode ser reconhecida por um **Autômato de Pilha (PDA)**.  
 
 ---
 
-### ** Escolha da Linguagem**
+### **Escolha da Linguagem**
 Vamos implementar um reconhecedor para a linguagem:
-\[L = \{ a^n b^n \mid n \geq 1 \}\]
+$L = \{ a^n b^n \mid n \geq 1 \}$
 Isso significa que a string deve conter um número **igual** de `a`s e `b`s, **mas sempre com os `a`s antes dos `b`s**.
 
  **Exemplos de strings aceitas**:
@@ -588,7 +591,7 @@ Isso significa que a string deve conter um número **igual** de `a`s e `b`s, **m
 
 ---
 
-### ** Código em C**
+### **Código em C**
 O programa utiliza **uma pilha** para simular um **Autômato de Pilha (PDA)**. Cada `a` é empilhado e cada `b` desempilha um `a`. No final, a pilha deve estar **vazia** para a string ser aceita.
 
 ```c
@@ -670,12 +673,12 @@ int main() {
 
 ---
 
-### ** Como funciona?**
+### **Como funciona?**
  **Empilha os `a`s** encontrados.  
  **Para cada `b` encontrado, desempilha um `a`**.  
  **Se a pilha estiver vazia no final, a string pertence à linguagem**.  
 
-### ** Saída esperada**
+### **Saída esperada**
 ```
 A string "ab" pertence à linguagem a^n b^n
 A string "aabb" pertence à linguagem a^n b^n
@@ -690,14 +693,14 @@ A string "" NÃO pertence à linguagem a^n b^n
 
 ---
 
-### ** Explicação**
+### **Explicação**
  **Autômato de Pilha**: Utiliza uma pilha para armazenar os `a`s e os desempilha ao encontrar `b`s.  
  **Ordem Importante**: Os `b`s **nunca podem vir antes dos `a`s**.  
  **Conta igual de `a`s e `b`s**: Se sobrar `a`s na pilha no final, a string **é rejeitada**.  
 
 ---
 
-### **  Resumo**
+### **Resumo**
  **Este é um exemplo de gramática do Tipo 2** da **Hierarquia de Chomsky**.  
  **Utiliza um Autômato de Pilha (PDA)** para reconhecer a linguagem.  
  **Simples, eficiente e fácil de expandir** para outras linguagens livres de contexto.  
@@ -711,7 +714,7 @@ Elas são usadas para **linguagens formais que precisam de regras mais rigorosas
 
 ---
 
-## ** Características das Linguagens Sensíveis ao Contexto**  
+## **Características das Linguagens Sensíveis ao Contexto**  
 
 - **Definidas por gramáticas sensíveis ao contexto (GSC)**.  
 - **Podem ser reconhecidas por máquinas de Turing lineares** (LBA – *Linear Bounded Automaton*).  
@@ -720,7 +723,7 @@ Elas são usadas para **linguagens formais que precisam de regras mais rigorosas
 
 ---
 
-## ** Regras das Gramáticas Sensíveis ao Contexto**  
+## **Regras das Gramáticas Sensíveis ao Contexto**  
 
 As regras de produção têm a seguinte forma:  
 
@@ -737,45 +740,96 @@ Onde:
 
 ---
 
-## ** Exemplo 1: Linguagem `a^n b^n c^n`**  
-
- **Objetivo**: Criar uma linguagem que aceita cadeias com **o mesmo número de `'a'`, `'b'` e `'c'`**, como:  
-
- `"abc"`, `"aabbcc"`, `"aaabbbccc"`.  
- `"aabbc"`, `"abbcc"`, `"aaabbbcc"`.  
+Ótima pergunta! Vou detalhar passo a passo como a regra sensível ao contexto funciona na derivação.  
 
 ---
 
-### **Gramática Sensível ao Contexto**  
+## **O que significa "Sensível ao Contexto"?**
+Nas gramáticas sensíveis ao contexto, uma variável **só pode ser substituída dependendo dos símbolos ao seu redor**.  
 
-```
-S → aSBC | abc  
-CB → BC  
-B → b  
-C → c  
-```
+Em contraste com gramáticas livres de contexto, onde as regras podem ser aplicadas independentemente da posição do símbolo, nas gramáticas sensíveis ao contexto, o contexto influencia quais regras podem ser aplicadas.
 
- **Explicação**:  
-- `S → aSBC` insere `'a'` no início e `'BC'` no final, garantindo o padrão `a^n B^n C^n`.  
-- `CB → BC` reorganiza a cadeia para `'b'`s ficarem antes dos `'c'`s.  
-- `B → b` e `C → c` transformam os não-terminais `'B'` e `'C'` em seus respectivos símbolos terminais.  
+---
 
- **Derivação para `"aaabbbccc"`**  
+## **Exemplo: Gerando $aabbcc$**
+A gramática que vamos usar é:
 
-1. `S → aSBC` → `"aSBC"`  
-2. `aSBC → aaSBCCB` → `"aaSBCCB"`  
-3. `aaSBCCB → aaaBCCBBC`  
-4. **Reorganização:**  
-   - `CB → BC` → `"aaaBBBCCC"`  
-5. **Transformação:**  
-   - `B → b`, `C → c` → `"aaabbbccc"`   
+1. $S \rightarrow aSBc$  
+2. $aB \rightarrow ab$  
+3. $bB \rightarrow bb$  
+4. $Bc \rightarrow bc$  
+5. $aBc \rightarrow abc$  
+
+Queremos gerar a string **$aabbcc$**, ou seja, $n = 2$.
+
+---
+
+### **Passo 1: Começamos com $S$**  
+A primeira regra nos diz que podemos expandir $S$:
+
+$
+S \Rightarrow aSBc
+$
+
+Como ainda não temos $n = 2$, aplicamos $S\rightarrow aSBc$ novamente:
+
+$aSBc \Rightarrow aaSBBcc$
+
+Agora temos **dois** $B$, então precisamos processá-los.
+
+---
+
+### **Passo 2: Eliminando $S$**  
+Em uma gramática livre de contexto, poderíamos substituir $S$ diretamente. Mas, em uma gramática sensível ao contexto, a substituição **depende do que está ao redor**.  
+Para remover $S$, aplicamos a última regra:
+
+$S \rightarrow \varepsilon$
+
+Isso nos dá:
+
+$aaBBcc$
+
+Agora precisamos eliminar os $B$.
+
+---
+
+### **Passo 3: Transformando os $B$**
+Aqui entram as regras sensíveis ao contexto. A conversão de $B$ para $b$ **depende do que está ao seu lado**:
+
+1. Se $B$ aparece depois de um $a$, usamos $aB \rightarrow ab$:
+
+   $
+   aaBBcc \Rightarrow aabBcc
+$
+
+2. Agora temos $bB$, e aplicamos a regra $bB \rightarrow bb$:
+
+   $
+   aabbcc
+$
+
+---
+
+## **O que faz essa gramática ser sensível ao contexto?**
+Veja que a substituição do $B$ **não ocorre de forma arbitrária**. Cada substituição acontece **dependendo dos símbolos vizinhos**.  
+Por exemplo, $aB \rightarrow ab$ **só pode ser aplicada quando $B$ é precedido por $a$**. Se o contexto fosse diferente (por exemplo, $bB$), a regra seria outra.
+
+Essa dependência do contexto é a principal característica das gramáticas sensíveis ao contexto.
+
+---
+
+## **Resumo**
+- A regra $S \rightarrow aSBc$ gera a estrutura inicial.
+- As regras para $B$ são aplicadas **dependendo do contexto**.
+- Isso garante que a quantidade de $a$, $b$ e $c$ seja sempre a mesma.
+
 
  **Por que isso NÃO é possível com gramáticas livres de contexto (GLC - Tipo 2)?**  
 Porque **GLCs não conseguem controlar múltiplas contagens simultaneamente**. A linguagem `a^n b^n c^n` exige que as contagens de `'a'`, `'b'` e `'c'` sejam **iguais**, o que não pode ser feito apenas com uma pilha (como nos autômatos de pilha).  
 
 ---
 
-## ** Exemplo 2: Verificação de Ordem de Palavras**  
+## **Exemplo 2: Verificação de Ordem de Palavras**  
 
  **Objetivo**: Criar uma linguagem que aceita frases onde um adjetivo só pode ser seguido por um substantivo.  
 
@@ -799,7 +853,7 @@ Porque a regra `S → ADJ N` garante que **um adjetivo só pode aparecer antes d
 
 ---
 
-## ** Diferença entre os Tipos 2 e 1 (GLC vs. GSC)**  
+## **Diferença entre os Tipos 2 e 1 (GLC vs. GSC)**  
 
 | **Característica**         | **Linguagens Livres de Contexto (Tipo 2)** | **Linguagens Sensíveis ao Contexto (Tipo 1)** |
 |---------------------------|--------------------------------|----------------------------------|
@@ -810,7 +864,7 @@ Porque a regra `S → ADJ N` garante que **um adjetivo só pode aparecer antes d
 
 ---
 
-## ** Aplicações das Linguagens Sensíveis ao Contexto**  
+## **Aplicações das Linguagens Sensíveis ao Contexto**  
 
  **Processamento de Linguagem Natural (PLN)**:  
 - Algumas regras gramaticais humanas precisam de contexto (ex: gênero e número em frases).  
@@ -823,7 +877,7 @@ Porque a regra `S → ADJ N` garante que **um adjetivo só pode aparecer antes d
 
 ---
 
-## ** Conclusão**  
+## **Conclusão**  
 
 As **linguagens sensíveis ao contexto** (Tipo 1) são **mais poderosas** que as linguagens livres de contexto (Tipo 2), pois podem descrever **estruturas que exigem múltiplas contagens simultâneas**.  
 
@@ -843,9 +897,9 @@ Aqui está um exemplo **em C** que reconhece uma linguagem do **Tipo 1 da Hierar
 
 ---
 
-## ** Linguagem do Tipo 1 (Sensível ao Contexto)**
+## **Linguagem do Tipo 1 (Sensível ao Contexto)**
 A linguagem escolhida é:  
-\[L = \{ a^n b^m c^m d^n \ | \ n, m \geq 1 \}\]
+$L = \{ a^n b^m c^m d^n \ | \ n, m \geq 1 \}$
 Essa linguagem exige que:
 1. O número de `a`s seja **igual** ao número de `d`s.
 2. O número de `b`s seja **igual** ao número de `c`s.
@@ -855,7 +909,7 @@ Essa linguagem exige que:
 
 ---
 
-## ** Código em C**
+## **Código em C**
 ```c
 #include <stdio.h>
 #include <string.h>
@@ -911,7 +965,7 @@ int main() {
 
 ---
 
-## ** Exemplo de Saída**
+## **Exemplo de Saída**
 ```
 A string "abbcdd" pertence à linguagem a^n b^m c^m d^n
 A string "aabbccdd" pertence à linguagem a^n b^m c^m d^n
@@ -925,7 +979,7 @@ A string "aaaa" NÃO pertence à linguagem a^n b^m c^m d^n
 
 ---
 
-## ** Explicação**
+## **Explicação**
  **Conta os caracteres `a`, `b`, `c` e `d`**.  
  **Verifica se estão na ordem correta**.  
  **Garante que `a`s e `d`s tenham o mesmo número**.  
@@ -934,14 +988,14 @@ A string "aaaa" NÃO pertence à linguagem a^n b^m c^m d^n
 
 ---
 
-## **  Resumo**
+## **Resumo**
  Este código implementa **uma linguagem sensível ao contexto** do **Tipo 1** da Hierarquia de Chomsky.  
  **Verifica a validade da entrada** com base nas regras da gramática.  
  **Usa uma abordagem eficiente** de contagem de caracteres e estados.  
 
 ---
 
-## ** Características das Linguagens Tipo 0**  
+## **Características das Linguagens Tipo 0**  
 
 - **Definidas por Gramáticas Recursivamente Enumeráveis (GRE)**.  
 - **Podem ser reconhecidas por uma Máquina de Turing (MT)**, mas nem sempre em tempo finito.  
@@ -950,7 +1004,7 @@ A string "aaaa" NÃO pertence à linguagem a^n b^m c^m d^n
 
 ---
 
-## ** Regras das Gramáticas Recursivamente Enumeráveis**  
+## **Regras das Gramáticas Recursivamente Enumeráveis**  
 
 As regras de produção são da forma:  
 
@@ -966,7 +1020,7 @@ Onde:
 
 ---
 
-## ** Exemplo 1: Reconhecendo o Palíndromo Geral**  
+## **Exemplo 1: Reconhecendo o Palíndromo Geral**  
 
  **Objetivo**: Criar uma gramática que reconhece qualquer palavra palíndroma, como:  
 
@@ -1000,7 +1054,7 @@ Porque não há **limite fixo** para quantas repetições podem ocorrer, e a rec
 
 ---
 
-## ** Exemplo 2: Linguagem `{ a^n b^m c^m d^n | n, m ≥ 1 }`**  
+## **Exemplo 2: Linguagem `{ a^n b^m c^m d^n | n, m ≥ 1 }`**  
 
  **Objetivo**: Criar uma linguagem onde:  
 - A quantidade de `'a'`s é igual à de `'d'`s.  
@@ -1037,7 +1091,7 @@ Porque **é necessário um controle de múltiplas dependências** (`a/d` e `b/c`
 
 ---
 
-## ** Diferença entre os Tipos 1 e 0 (GSC vs. GRE)**  
+## **Diferença entre os Tipos 1 e 0 (GSC vs. GRE)**  
 
 | **Característica**         | **Linguagens Sensíveis ao Contexto (Tipo 1)** | **Linguagens Recursivamente Enumeráveis (Tipo 0)** |
 |---------------------------|--------------------------------|----------------------------------|
@@ -1048,7 +1102,7 @@ Porque **é necessário um controle de múltiplas dependências** (`a/d` e `b/c`
 
 ---
 
-## ** Aplicações das Linguagens Recursivamente Enumeráveis**  
+## **Aplicações das Linguagens Recursivamente Enumeráveis**  
 
  **Teoria da Computação**  
 - Muitas **linguagens formais e problemas matemáticos** caem na classe das **linguagens recursivamente enumeráveis**.  
@@ -1061,7 +1115,7 @@ Porque **é necessário um controle de múltiplas dependências** (`a/d` e `b/c`
 
 ---
 
-## ** Relação com Problemas Indecidíveis**  
+## **Relação com Problemas Indecidíveis**  
 
 A classe **Tipo 0 inclui linguagens indecidíveis**, ou seja, problemas que **não podem ser resolvidos por qualquer algoritmo finito**.  
 
@@ -1073,7 +1127,7 @@ Exemplo: **Problema da Parada**
 
 ---
 
-## ** Conclusão**  
+## **Conclusão**  
 
 As **linguagens recursivamente enumeráveis** (Tipo 0) são as mais poderosas da Hierarquia de Chomsky.  
 
@@ -1093,7 +1147,7 @@ As **linguagens recursivamente enumeráveis** (Tipo 0) são as mais poderosas da
 
 Aqui está um exemplo em **C** que implementa um reconhecedor para uma linguagem do **Tipo 0** da **Hierarquia de Chomsky**. A linguagem escolhida é:
 
-\[L = \{ w w^R \ | \ w \in \{a, b\}^* \}\]
+$L = \{ w w^R \ | \ w \in \{a, b\}^* \}$
 
 Isso significa que a linguagem aceita **qualquer palavra composta por `a` e `b`, seguida de seu espelhamento (reverso)**.  
 Exemplos de palavras aceitas:
@@ -1103,7 +1157,7 @@ Exemplos de palavras aceitas:
 
 ---
 
-### ** Estratégia da Implementação**
+### **Estratégia da Implementação**
 O programa verifica se a string de entrada pertence à linguagem $w w^R$ seguindo estes passos:
  **Divide a string ao meio**.  
  **Compara a segunda metade com o inverso da primeira metade**.  
@@ -1111,7 +1165,7 @@ O programa verifica se a string de entrada pertence à linguagem $w w^R$ seguind
 
 ---
 
-### ** Código em C**
+### **Código em C**
 ```c
 #include <stdio.h>
 #include <string.h>
@@ -1165,7 +1219,7 @@ int main() {
 ---
 
 
-### ** Saída esperada**
+### **Saída esperada**
 ```
 A string "abbaabba" pertence à linguagem ww^R
 A string "aabbbaa" pertence à linguagem ww^R
@@ -1179,7 +1233,7 @@ A string "" NÃO pertence à linguagem ww^R
 
 ---
 
-### ** Explicação**
+### **Explicação**
  **Apenas strings da forma $w w^R$ são aceitas**.  
  **Usamos a técnica de espelhamento para validar a linguagem**.  
  **Não há restrições na gramática**, sendo **Tipo 0** da **Hierarquia de Chomsky**.  
