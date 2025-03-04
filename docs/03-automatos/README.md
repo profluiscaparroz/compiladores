@@ -840,6 +840,152 @@ Como o autômato termina em $q₁$, que não é um estado de aceitação, a entr
 
 Como o autômato termina em $q₀$, que é um estado de aceitação, a entrada **é aceita**.
 
+Os **autômatos finitos determinísticos (AFD)** são modelos matemáticos usados para processar e reconhecer linguagens formais. Eles consistem em um conjunto de estados e uma função de transição que determina como o autômato se move de um estado para outro com base no símbolo de entrada. Vamos analisar alguns exemplos práticos para ilustrar como os AFDs processam strings e reconhecem linguagens.
+
+### Exemplo 1: Reconhecimento de strings que terminam com "ab"
+
+Consideramos um autômato que reconhece strings que terminam com "ab". Isso significa que a máquina precisa verificar se a sequência final da string é "ab", independentemente do que aconteceu antes.
+
+#### Diagrama do AFD
+
+- Estados: `Q0` (inicial), `Q1`, `Q2` (estado de aceitação)
+- Alfabeto: `{a, b}`
+- Função de transição:
+
+| Estado | Entrada 'a' | Entrada 'b' |
+|--------|-------------|-------------|
+| Q0     | Q1          | Q0          |
+| Q1     | Q1          | Q2          |
+| Q2     | Q1          | Q0          |
+
+#### Descrição do AFD:
+1. O autômato começa no estado `Q0`.
+2. Se o símbolo de entrada for 'a', ele transita para o estado `Q1`.
+3. Se o símbolo for 'b', ele transita de volta para `Q0`.
+4. Quando o autômato estiver no estado `Q1` e ler 'b', ele transita para `Q2`, que é o estado de aceitação. Ou seja, o autômato aceita as strings que terminam com "ab".
+5. Se o autômato estiver no estado `Q2` e ler qualquer entrada (seja 'a' ou 'b'), ele retorna ao estado `Q0` ou `Q1`, dependendo do símbolo.
+
+#### Processamento de uma string: `"ab"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'a' → transita para `Q1`
+  - Segundo símbolo: 'b' → transita para `Q2` (estado de aceitação)
+
+Como o autômato terminou em um estado de aceitação (`Q2`), a string `"ab"` é aceita.
+
+#### Processamento de outra string: `"aab"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'a' → transita para `Q1`
+  - Segundo símbolo: 'a' → transita para `Q1` (permanece em `Q1`)
+  - Terceiro símbolo: 'b' → transita para `Q2` (estado de aceitação)
+
+A string `"aab"` também é aceita, porque o autômato termina no estado de aceitação `Q2`.
+
+#### Processamento de outra string: `"ba"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'b' → transita para `Q0` (permanece em `Q0`)
+  - Segundo símbolo: 'a' → transita para `Q1`
+
+O autômato termina no estado `Q1`, que **não é um estado de aceitação**, portanto, a string `"ba"` **não é aceita**.
+
+---
+
+### Exemplo 2: Linguagem de strings que contêm um número par de 'a's
+
+Agora, vamos criar um AFD para aceitar strings que contenham um número par de caracteres 'a'. Ou seja, queremos reconhecer a linguagem `{w | w contém um número par de 'a's}`.
+
+#### Diagrama do AFD
+
+- Estados: `Q0` (inicial e de aceitação), `Q1`
+- Alfabeto: `{a, b}`
+- Função de transição:
+
+| Estado | Entrada 'a' | Entrada 'b' |
+|--------|-------------|-------------|
+| Q0     | Q1          | Q0          |
+| Q1     | Q0          | Q1          |
+
+#### Descrição do AFD:
+1. O autômato começa no estado `Q0`, que é o estado de aceitação e representa um número par de 'a's.
+2. Quando ele lê um 'a', ele transita para o estado `Q1`, representando que agora há um número ímpar de 'a's.
+3. Quando ele lê outro 'a', ele volta para o estado `Q0`, representando que o número de 'a's voltou a ser par.
+4. Se o autômato lê um 'b', ele permanece no estado atual (não afeta a contagem de 'a's).
+
+#### Processamento de uma string: `"aab"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'a' → transita para `Q1`
+  - Segundo símbolo: 'a' → transita para `Q0` (estado de aceitação)
+  - Terceiro símbolo: 'b' → permanece em `Q0`
+
+A string `"aab"` é aceita, porque o número de 'a's é par.
+
+#### Processamento de outra string: `"ab"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'a' → transita para `Q1`
+  - Segundo símbolo: 'b' → permanece em `Q1`
+
+A string `"ab"` **não é aceita**, porque o número de 'a's é ímpar e o autômato termina no estado `Q1`.
+
+#### Processamento de outra string: `"baab"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'b' → permanece em `Q0`
+  - Segundo símbolo: 'a' → transita para `Q1`
+  - Terceiro símbolo: 'a' → transita para `Q0` (estado de aceitação)
+  - Quarto símbolo: 'b' → permanece em `Q0`
+
+A string `"baab"` é aceita, pois o número de 'a's é par.
+
+---
+
+### Exemplo 3: Linguagem de strings que contêm "ab" como substring
+
+Agora, vamos criar um AFD para reconhecer strings que contêm "ab" como substring. Ou seja, a máquina aceita qualquer string que tenha "ab" em algum ponto da sequência.
+
+#### Diagrama do AFD
+
+- Estados: `Q0` (inicial), `Q1`, `Q2` (estado de aceitação)
+- Alfabeto: `{a, b}`
+- Função de transição:
+
+| Estado | Entrada 'a' | Entrada 'b' |
+|--------|-------------|-------------|
+| Q0     | Q1          | Q0          |
+| Q1     | Q1          | Q2          |
+| Q2     | Q2          | Q2          |
+
+#### Descrição do AFD:
+1. O autômato começa no estado `Q0`.
+2. Se ele lê 'a', ele transita para `Q1`.
+3. Se ele, em `Q1`, ler 'b', ele transita para `Q2` (estado de aceitação). Isso significa que "ab" foi encontrado.
+4. Uma vez que o autômato tenha alcançado o estado `Q2`, ele permanece em `Q2` para todas as entradas subsequentes.
+
+#### Processamento de uma string: `"aabb"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'a' → transita para `Q1`
+  - Segundo símbolo: 'a' → permanece em `Q1`
+  - Terceiro símbolo: 'b' → transita para `Q2` (estado de aceitação)
+  - Quarto símbolo: 'b' → permanece em `Q2`
+
+A string `"aabb"` é aceita, porque contém "ab" como substring.
+
+#### Processamento de outra string: `"ba"`
+
+- Estado inicial: `Q0`
+  - Primeiro símbolo: 'b' → permanece em `Q0`
+  - Segundo símbolo: 'a' → transita para `Q1`
+
+A string `"ba"` **não é aceita**, porque não contém "ab" como substring.
+
+---
+
+Esses exemplos ilustram como os autômatos finitos determinísticos (AFDs) processam strings e reconhecem linguagens com base nas transições entre seus estados. A ideia central é que, ao processar uma string, o autômato transita de estado para estado de acordo com a entrada e, no final, aceita ou rejeita a string com base no estado em que termina.
+
 ### 10. Estrutura de Estados e Funcionalidade do AFD
 
 A definição de um AFD é baseada em quatro componentes essenciais:
