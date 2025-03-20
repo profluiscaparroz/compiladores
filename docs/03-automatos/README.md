@@ -307,15 +307,15 @@ Atualmente, **ninguém sabe a resposta**. Se fosse provado que **P = NP**, entã
 ### **3.4. Aplicações do Estudo da Complexidade Computacional**
 Compreender a complexidade computacional tem impactos diretos no mundo real. Alguns exemplos incluem:  
 
- **Criptografia** 🔒  
+ **Criptografia**  
 - Algoritmos de criptografia (como RSA) se baseiam na **dificuldade de fatorar números grandes**.  
 - Se alguém provar que **P = NP**, a maioria dos sistemas de segurança se tornaria obsoleta.  
 
- **Logística e Otimização** 🚚  
+ **Logística e Otimização** 
 - Empresas como Amazon e Uber usam algoritmos de otimização para encontrar as **melhores rotas e distribuir recursos eficientemente**.  
 - Muitos desses problemas são **NP-Difíceis**, então são usados algoritmos aproximados.  
 
- **Inteligência Artificial** 🤖  
+ **Inteligência Artificial**  
 - Aprendizado de máquina envolve encontrar padrões em grandes conjuntos de dados.  
 - O estudo da complexidade ajuda a criar **redes neurais e algoritmos de aprendizado mais eficientes**.  
 
@@ -423,7 +423,7 @@ FSMs são fundamentais para projetar circuitos sequenciais, como controladores d
 
 ---
 
-## **4. Implementação de um AFD em Python**  
+## **4. Implementação de um AFD em C**  
 Exemplo simples de um **Autômato Finito Determinístico (AFD)** em C, que reconhece a linguagem que aceita a sequência de símbolos "ab" repetidos, ou seja, ele aceita strings formadas pela repetição de "ab" (como "ab", "abab", "ababab", etc.).
 
 ### Exemplo de AFD em C
@@ -538,15 +538,15 @@ As **linguagens formais** são sistemas de símbolos e regras que definem padrõ
 
 ### 1. **Definição de Linguagem Formal**
 
-Uma **linguagem formal** é um conjunto de cadeias (ou palavras) que são formadas a partir de um **alfabeto**. Um alfabeto é um conjunto finito de símbolos (por exemplo, $\Sigma = \{a, b\} $) e as palavras da linguagem são sequências desses símbolos. 
+Uma **linguagem formal** é um conjunto de cadeias (ou palavras) que são formadas a partir de um **alfabeto**. Um alfabeto é um conjunto finito de símbolos (por exemplo, $\Sigma = \{a, b\}$) e as palavras da linguagem são sequências desses símbolos. 
 
-Formalmente, uma linguagem $L $ sobre um alfabeto $\Sigma $ é um conjunto de palavras, e uma palavra $w $ é uma sequência finita de símbolos de $\Sigma $. A **gramática** de uma linguagem formal define as regras para gerar todas as palavras dessa linguagem.
+Formalmente, uma linguagem $L $ sobre um alfabeto $\Sigma$ é um conjunto de palavras, e uma palavra $w$ é uma sequência finita de símbolos de $\Sigma$. A **gramática** de uma linguagem formal define as regras para gerar todas as palavras dessa linguagem.
 
 #### Exemplos de Linguagens Formais:
 
-1. **Linguagem sobre o alfabeto $\Sigma = \{0, 1\} $**: A linguagem $L $ que contém todas as palavras de comprimento par, como $\{ \epsilon, 00, 11, 0101, 1001, \dots \} $.
+1. **Linguagem sobre o alfabeto $\Sigma = \{0, 1\} $**: A linguagem $L$ que contém todas as palavras de comprimento par, como $\{ \epsilon, 00, 11, 0101, 1001, \dots \}$.
    
-2. **Linguagem de Parênteses Balanceados**: A linguagem formada por todas as palavras com parênteses corretamente balanceados, como $\{ \epsilon, (), (()), ()() \} $.
+2. **Linguagem de Parênteses Balanceados**: A linguagem formada por todas as palavras com parênteses corretamente balanceados, como $\{ \epsilon, (), (()), ()() \}$.
 
 ### 2. **Gramáticas Formais**
 
@@ -557,11 +557,11 @@ Uma **gramática formal** é uma maneira de descrever a estrutura de uma linguag
 - **Regras de Produção**: Descrevem como os símbolos podem ser substituídos ou gerados.
 - **Símbolo inicial**: O símbolo a partir do qual todas as palavras podem ser geradas.
 
-Uma gramática formal pode ser representada como uma quádrupla $G = (V, \Sigma, R, S) $, onde:
-- $V $ é um conjunto de variáveis,
-- $\Sigma $ é um alfabeto (conjunto de símbolos terminais),
-- $R $ é um conjunto de regras de produção,
-- $S $ é o símbolo inicial.
+Uma gramática formal pode ser representada como uma quádrupla $G = (V, \Sigma, R, S)$, onde:
+- $V$ é um conjunto de variáveis,
+- $\Sigma$ é um alfabeto (conjunto de símbolos terminais),
+- $R$ é um conjunto de regras de produção,
+- $S$ é o símbolo inicial.
 
 ### 3. **Classes de Linguagens Formais**
 
