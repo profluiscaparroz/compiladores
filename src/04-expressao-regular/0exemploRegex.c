@@ -74,3 +74,38 @@ int main() {
     
     return 0;
 }
+
+// Explicacao do regex
+/*
+A expressão regular "a*b.c" tem o seguinte significado:
+
+a*:
+
+O caractere a pode aparecer zero ou mais vezes.
+Exemplos válidos: "" (nenhum a), "a", "aa", "aaa", etc.
+b:
+
+O caractere b deve aparecer exatamente uma vez após os as.
+.:
+
+O ponto (.) é um curinga que corresponde a qualquer caractere único (exceto uma nova linha).
+c:
+
+O caractere c deve aparecer exatamente uma vez no final.
+Resumo:
+A regex "a*b.c" corresponde a:
+
+Uma sequência de zero ou mais as, seguida por:
+Um único caractere b, seguido por:
+Qualquer caractere único, seguido por:
+Um único caractere c.
+Exemplos de correspondências válidas:
+"bXc": Nenhum a, seguido de b, qualquer caractere (X), e c.
+"abZc": Um a, seguido de b, qualquer caractere (Z), e c.
+"aaaabQc": Quatro as, seguido de b, qualquer caractere (Q), e c.
+Exemplos de correspondências inválidas:
+"abc": Falta o caractere curinga entre b e c.
+"aabcc": Há um caractere extra após c.
+"aaaac": Falta o b antes do curinga.
+
+*/
