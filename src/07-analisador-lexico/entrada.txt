@@ -1,0 +1,5 @@
+// este é um comentário de linha
+x = 42; /* este é um comentário de bloco */
+if (x == 42) {
+    return x;
+}
