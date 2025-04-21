@@ -1,0 +1,2 @@
+x = "Olá, mundo!";
+msg = "Valor: \"42\"";
