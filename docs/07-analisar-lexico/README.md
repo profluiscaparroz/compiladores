@@ -345,7 +345,12 @@ typedef enum {
     TOKEN_NUMBER,
     TOKEN_SYMBOL,
     TOKEN_UNKNOWN,
-    TOKEN_EOF
+    TOKEN_EOF,
+    TOKEN_STRING,
+    TOKEN_COMMENT,
+    TOKEN_CHAR,
+    TOKEN_OPERATOR,
+    TOKEN_PREPROCESSOR
 } TokenType;
 
 typedef struct {
@@ -354,6 +359,8 @@ typedef struct {
 } Token;
 
 // Verifica se é uma palavra-chave
+// Esta função recebe uma string e verifica se ela está na lista de palavras-chave.
+// Retorna 1 se for uma palavra-chave, caso contrário retorna 0.
 int is_keyword(const char* str) {
     for (int i = 0; i < num_keywords; i++) {
         if (strcmp(str, keywords[i]) == 0) {
@@ -363,7 +370,10 @@ int is_keyword(const char* str) {
     return 0;
 }
 
-// Lê próximo token
+// Lê o próximo token do arquivo
+// Esta função analisa o arquivo caractere por caractere para identificar tokens.
+// Ela reconhece diferentes tipos de tokens, como palavras-chave, identificadores, números, strings, símbolos e comentários.
+// Retorna um token identificado.
 Token get_next_token(FILE* fp) {
     char ch;
     Token token;
@@ -372,6 +382,59 @@ Token get_next_token(FILE* fp) {
     // Pular espaços em branco
     while ((ch = fgetc(fp)) != EOF && isspace(ch));
 
+    // Verificar e ignorar comentários
+    if (ch == '/') {
+        char next = fgetc(fp);
+        if (next == '/') {
+            // Comentário de linha - ignora até o fim da linha
+            while ((ch = fgetc(fp)) != EOF && ch != '\n');
+            return get_next_token(fp); // chama recursivamente para buscar próximo token
+        } else if (next == '*') {
+            // Comentário de bloco - ignora até encontrar */
+            char prev = 0;
+            while ((ch = fgetc(fp)) != EOF) {
+                if (prev == '*' && ch == '/') {
+                    break;
+                }
+                prev = ch;
+            }
+            return get_next_token(fp); // continua buscando tokens
+        } else {
+            // Não era comentário, é divisão ou outro operador
+            ungetc(next, fp);
+        }
+    }
+    
+    // String literal
+    if (ch == '"') {
+        token.type = TOKEN_STRING;
+        i = 0;
+        token.lexeme[i++] = ch; // abre aspas
+
+        while ((ch = fgetc(fp)) != EOF) {
+            token.lexeme[i++] = ch;
+
+            if (ch == '\\') {
+                // Lê o caractere escapado (ex: \" ou \\)
+                char esc = fgetc(fp);
+                if (esc == EOF) break;
+                token.lexeme[i++] = esc;
+            } else if (ch == '"') {
+                // Fechou a string
+                break;
+            }
+
+            if (i >= MAX_TOKEN_LENGTH - 2) {
+                printf("String muito longa!\n");
+                exit(1);
+            }
+        }
+
+        token.lexeme[i] = '\0';
+        return token;
+    }
+
+    // Verifica se chegou ao final do arquivo
     if (ch == EOF) {
         token.type = TOKEN_EOF;
         strcpy(token.lexeme, "EOF");
@@ -379,6 +442,8 @@ Token get_next_token(FILE* fp) {
     }
 
     // Identificadores ou palavras-chave
+    // Identifica palavras que começam com letras ou '_'.
+    // Verifica se é uma palavra-chave ou um identificador.
     if (isalpha(ch) || ch == '_') {
         token.lexeme[i++] = ch;
         while ((ch = fgetc(fp)) != EOF && (isalnum(ch) || ch == '_')) {
@@ -396,6 +461,7 @@ Token get_next_token(FILE* fp) {
     }
 
     // Números
+    // Identifica sequências de dígitos como números.
     if (isdigit(ch)) {
         token.lexeme[i++] = ch;
         while ((ch = fgetc(fp)) != EOF && isdigit(ch)) {
@@ -408,6 +474,7 @@ Token get_next_token(FILE* fp) {
     }
 
     // Símbolos simples
+    // Identifica símbolos como operadores ou pontuações.
     if (strchr("+-*/=;()", ch)) {
         token.lexeme[0] = ch;
         token.lexeme[1] = '\0';
@@ -416,12 +483,16 @@ Token get_next_token(FILE* fp) {
     }
 
     // Token desconhecido
+    // Caso nenhum dos casos anteriores seja atendido, o caractere é considerado desconhecido.
     token.lexeme[0] = ch;
     token.lexeme[1] = '\0';
     token.type = TOKEN_UNKNOWN;
     return token;
 }
 
+// Converte o tipo de token para uma string
+// Esta função recebe um tipo de token e retorna uma string representando o tipo.
+// É útil para exibir os tokens de forma legível.
 const char* token_type_to_string(TokenType type) {
     switch (type) {
         case TOKEN_KEYWORD: return "KEYWORD";
@@ -433,6 +504,9 @@ const char* token_type_to_string(TokenType type) {
     }
 }
 
+// Função principal
+// Abre o arquivo de entrada, lê os tokens usando `get_next_token` e os exibe no console.
+// Fecha o arquivo ao final.
 int main() {
     FILE* fp = fopen("entrada.txt", "r");
     if (!fp) {
@@ -603,3 +677,288 @@ if (MATCH_COMPOSITE('=', '=') || MATCH_COMPOSITE('!', '=') || ...)
 ```
 
 ---
+
+### Documentação do Código: exemploSimples.c
+
+
+**Descrição Geral**
+
+Este código implementa um analisador léxico simples que lê um arquivo de entrada (entrada.txt) e divide seu conteúdo em tokens. Um token é uma unidade básica de uma linguagem, como palavras-chave, identificadores, números, símbolos, etc. O programa processa o arquivo e imprime os tokens no formato <tipo, 'lexema'>, onde:
+
+- **Tipo**: Categoria do token (ex.: palavra-chave, identificador, número, etc.).   
+- **Lexema**: O valor textual do token extraído.
+
+
+O analisador léxico também reconhece e ignora comentários (de linha e de bloco) e espaços em branco.
+
+---
+
+#### **Estrutura do Código**
+
+##### **1. Definições e Estruturas**
+
+**Constantes**
+
+```c
+#define MAX_TOKEN_LENGTH 100
+```
+
+- Define o tamanho máximo de um token (100 caracteres).
+
+**Palavras-chave**
+
+```c
+const char* keywords[] = {"if", "else", "while", "return"};
+const int num_keywords = 4;
+```
+
+- Lista de palavras-chave reconhecidas pelo analisador léxico.
+- ```num_keywords``` define o número de palavras-chave.
+
+#### **Tipos de Tokens**
+
+```c
+typedef enum {
+    TOKEN_KEYWORD,
+    TOKEN_IDENTIFIER,
+    TOKEN_NUMBER,
+    TOKEN_SYMBOL,
+    TOKEN_UNKNOWN,
+    TOKEN_EOF,
+    TOKEN_STRING,
+    TOKEN_COMMENT,
+    TOKEN_CHAR,
+    TOKEN_OPERATOR,
+    TOKEN_PREPROCESSOR
+} TokenType;
+```
+-  Enumeração que define os tipos de tokens que o analisador pode reconhecer.
+
+
+#### **Estrutura do Token**
+
+```c
+
+typedef struct {
+    TokenType type;
+    char lexeme[MAX_TOKEN_LENGTH];
+} Token;
+```
+
+- Representa um token com:
+    - ```type```: O tipo do token (ex.: palavra-chave, identificador, etc.).
+    - ```lexeme```: O valor textual do token.
+
+---
+
+#### **2. Funções Auxiliares**
+
+**Verificar Palavras-Chave**
+
+```c
+int is_keyword(const char* str);
+```
+
+- Verifica se uma string é uma palavra-chave.
+- Retorna 1 se for uma palavra-chave, caso contrário, retorna 0.
+
+
+#### **3. Função Principal: ```get_next_token```**
+
+A função ```get_next_token``` lê o próximo token do arquivo e o classifica. Ela processa o arquivo caractere por caractere.
+
+**Etapas da Função**.  
+
+**1. Ignorar Espaços em Branco**
+```c
+while ((ch = fgetc(fp)) != EOF && isspace(ch));
+```
+
+- Ignora espaços, tabulações e quebras de linha.
+
+**2. Ignorar Comentários**
+
+    - **Comentários de Linha ()**:
+```c
+if (next == '/') {
+    while ((ch = fgetc(fp)) != EOF && ch != '\n');
+    return get_next_token(fp);
+}
+```
+
+- Ignora o restante da linha após .
+- **Comentários de Bloco (/* ... */):**
+```c
+if (next == '*') {
+    char prev = 0;
+    while ((ch = fgetc(fp)) != EOF) {
+        if (prev == '*' && ch == '/') break;
+        prev = ch;
+    }
+    return get_next_token(fp);
+}
+```
+
+- Ignora tudo entre /* e */.
+- 
+**3. Reconhecer Strings Literais**
+
+```c
+if (ch == '"') {
+    token.type = TOKEN_STRING;
+    ...
+}
+```
+- Lê strings delimitadas por aspas ("), incluindo caracteres escapados (ex.: \").
+
+
+**4. Reconhecer Identificadores e Palavras-Chave**
+```c
+
+
+if (isalpha(ch) || ch == '_') {
+    ...
+    if (is_keyword(token.lexeme)) {
+        token.type = TOKEN_KEYWORD;
+    } else {
+        token.type = TOKEN_IDENTIFIER;
+    }
+}
+```
+
+- Identificadores começam com letras ou _ e podem conter letras, números ou _.
+- Verifica se o identificador é uma palavra-chave.
+
+**5. Reconhecer Números**
+```C
+if (isdigit(ch)) {
+    ...
+    token.type = TOKEN_NUMBER;
+}
+```
+- Lê sequências de dígitos como números.
+
+**6. Reconhecer Símbolos**
+```c
+if (strchr("+-*/=;()", ch)) {
+    ...
+    token.type = TOKEN_SYMBOL;
+}
+```
+
+- Reconhece símbolos simples como +, -, *, /, =, ;, (, ).
+
+**7. Token Desconhecido**
+
+```c
+token.type = TOKEN_UNKNOWN;
+```
+
+- Classifica caracteres não reconhecidos como TOKEN_UNKNOWN.
+
+**8. Fim do Arquivo**
+```C
+if (ch == EOF) {
+    token.type = TOKEN_EOF;
+    strcpy(token.lexeme, "EOF");
+}
+```
+
+- Retorna o token TOKEN_EOF ao atingir o final do arquivo.
+
+#### **4. Função token_type_to_string**
+
+```c
+const char* token_type_to_string(TokenType type);
+```
+
+- Converte o tipo do token (TokenType) para uma string legível.
+- Exemplo:
+    - ```TOKEN_KEYWORD → "KEYWORD"```
+    - ```TOKEN_IDENTIFIER → "IDENTIFIER"```
+
+#### **5. Função ```main```**
+A função principal executa o analisador léxico.
+
+#### **Etapas**
+
+**1. Abrir o Arquivo**
+
+```c
+FILE* fp = fopen("entrada.txt", "r");
+if (!fp) {
+    printf("Erro ao abrir arquivo.\n");
+    return 1;
+}
+```
+
+- Abre o arquivo entrada.txt no modo de leitura.
+- Exibe uma mensagem de erro e encerra o programa se o arquivo não puder ser aberto.
+
+**2. Processar Tokens**
+```c
+do {
+    token = get_next_token(fp);
+    printf("<%s, '%s'>\n", token_type_to_string(token.type), token.lexeme);
+} while (token.type != TOKEN_EOF);
+```
+
+- Lê tokens do arquivo usando get_next_token.
+- Imprime cada token no formato <tipo, 'lexema'>.
+- Continua até encontrar o token TOKEN_EOF.
+
+**3. Fechar o Arquivo**
+```c
+fclose(fp);
+```
+
+- Fecha o arquivo após o processamento.
+
+**4. Encerrar o Programa**
+```c
+return 0;
+```
+
+- Retorna 0 para indicar que o programa foi executado com sucesso.
+
+
+### **Exemplo de Entrada e Saída**
+
+#### **Entrada (```entrada.txt```)**
+
+```c
+if (x == 10) {
+    // Este é um comentário
+    return x + 1;
+}
+```
+
+**Saída**
+
+```c
+<KEYWORD, 'if'>
+<SYMBOL, '('>
+<IDENTIFIER, 'x'>
+<SYMBOL, '=='>
+<NUMBER, '10'>
+<SYMBOL, ')'>
+<SYMBOL, '{'>
+<KEYWORD, 'return'>
+<IDENTIFIER, 'x'>
+<SYMBOL, '+'>
+<NUMBER, '1'>
+<SYMBOL, '}'>
+<EOF, 'EOF'>
+```
+
+**Resumo**
+
+Este código implementa um analisador léxico simples que:
+
+1. Lê um arquivo de entrada.
+2. Divide o conteúdo em tokens.
+3. Classifica os tokens em categorias como palavras-chave, identificadores, números, símbolos, etc.
+4. Ignora espaços em branco e comentários.
+5. Imprime os tokens no formato ```<tipo, 'lexema'>```.
+
+O analisador é uma base para a construção de compiladores ou interpretadores, onde a análise léxica é o primeiro passo no processamento de código-fonte.

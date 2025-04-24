@@ -29,6 +29,8 @@ typedef struct {
 } Token;
 
 // Verifica se é uma palavra-chave
+// Esta função recebe uma string e verifica se ela está na lista de palavras-chave.
+// Retorna 1 se for uma palavra-chave, caso contrário retorna 0.
 int is_keyword(const char* str) {
     for (int i = 0; i < num_keywords; i++) {
         if (strcmp(str, keywords[i]) == 0) {
@@ -38,7 +40,10 @@ int is_keyword(const char* str) {
     return 0;
 }
 
-// Lê próximo token
+// Lê o próximo token do arquivo
+// Esta função analisa o arquivo caractere por caractere para identificar tokens.
+// Ela reconhece diferentes tipos de tokens, como palavras-chave, identificadores, números, strings, símbolos e comentários.
+// Retorna um token identificado.
 Token get_next_token(FILE* fp) {
     char ch;
     Token token;
@@ -51,11 +56,11 @@ Token get_next_token(FILE* fp) {
     if (ch == '/') {
         char next = fgetc(fp);
         if (next == '/') {
-            // Comentário de linha - ignora até fim da linha
+            // Comentário de linha - ignora até o fim da linha
             while ((ch = fgetc(fp)) != EOF && ch != '\n');
             return get_next_token(fp); // chama recursivamente para buscar próximo token
         } else if (next == '*') {
-            // Comentário de bloco - ignora até */
+            // Comentário de bloco - ignora até encontrar */
             char prev = 0;
             while ((ch = fgetc(fp)) != EOF) {
                 if (prev == '*' && ch == '/') {
@@ -99,7 +104,7 @@ Token get_next_token(FILE* fp) {
         return token;
     }
 
-
+    // Verifica se chegou ao final do arquivo
     if (ch == EOF) {
         token.type = TOKEN_EOF;
         strcpy(token.lexeme, "EOF");
@@ -107,6 +112,8 @@ Token get_next_token(FILE* fp) {
     }
 
     // Identificadores ou palavras-chave
+    // Identifica palavras que começam com letras ou '_'.
+    // Verifica se é uma palavra-chave ou um identificador.
     if (isalpha(ch) || ch == '_') {
         token.lexeme[i++] = ch;
         while ((ch = fgetc(fp)) != EOF && (isalnum(ch) || ch == '_')) {
@@ -124,6 +131,7 @@ Token get_next_token(FILE* fp) {
     }
 
     // Números
+    // Identifica sequências de dígitos como números.
     if (isdigit(ch)) {
         token.lexeme[i++] = ch;
         while ((ch = fgetc(fp)) != EOF && isdigit(ch)) {
@@ -136,6 +144,7 @@ Token get_next_token(FILE* fp) {
     }
 
     // Símbolos simples
+    // Identifica símbolos como operadores ou pontuações.
     if (strchr("+-*/=;()", ch)) {
         token.lexeme[0] = ch;
         token.lexeme[1] = '\0';
@@ -144,12 +153,16 @@ Token get_next_token(FILE* fp) {
     }
 
     // Token desconhecido
+    // Caso nenhum dos casos anteriores seja atendido, o caractere é considerado desconhecido.
     token.lexeme[0] = ch;
     token.lexeme[1] = '\0';
     token.type = TOKEN_UNKNOWN;
     return token;
 }
 
+// Converte o tipo de token para uma string
+// Esta função recebe um tipo de token e retorna uma string representando o tipo.
+// É útil para exibir os tokens de forma legível.
 const char* token_type_to_string(TokenType type) {
     switch (type) {
         case TOKEN_KEYWORD: return "KEYWORD";
@@ -161,6 +174,9 @@ const char* token_type_to_string(TokenType type) {
     }
 }
 
+// Função principal
+// Abre o arquivo de entrada, lê os tokens usando `get_next_token` e os exibe no console.
+// Fecha o arquivo ao final.
 int main() {
     FILE* fp = fopen("entrada.txt", "r");
     if (!fp) {
