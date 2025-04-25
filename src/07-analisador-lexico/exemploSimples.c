@@ -9,23 +9,27 @@
 const char* keywords[] = {"if", "else", "while", "return"};
 const int num_keywords = 4;
 
+// Enumeração para os tipos de tokens
+// Define os diferentes tipos de tokens que podem ser reconhecidos pelo analisador léxico.
 typedef enum {
-    TOKEN_KEYWORD,
-    TOKEN_IDENTIFIER,
-    TOKEN_NUMBER,
-    TOKEN_SYMBOL,
-    TOKEN_UNKNOWN,
-    TOKEN_EOF,
-    TOKEN_STRING,
-    TOKEN_COMMENT,
-    TOKEN_CHAR,
-    TOKEN_OPERATOR,
-    TOKEN_PREPROCESSOR
+    TOKEN_KEYWORD,       // Palavra-chave (ex: if, else, while)
+    TOKEN_IDENTIFIER,    // Identificador (ex: nomes de variáveis ou funções)
+    TOKEN_NUMBER,        // Número (ex: 123, 45)
+    TOKEN_SYMBOL,        // Símbolo (ex: +, -, *, /, =, ;, etc.)
+    TOKEN_UNKNOWN,       // Token desconhecido (caractere não reconhecido)
+    TOKEN_EOF,           // Fim do arquivo
+    TOKEN_STRING,        // String literal (ex: "texto")
+    TOKEN_COMMENT,       // Comentário (ex: // ou /* */)
+    TOKEN_CHAR,          // Caractere literal (ex: 'a')
+    TOKEN_OPERATOR,      // Operador (ex: ==, <=, >=, etc.)
+    TOKEN_PREPROCESSOR   // Diretiva de pré-processador (ex: #include, #define)
 } TokenType;
 
+// Estrutura para representar um token
+// Contém o tipo do token e o lexema associado a ele.
 typedef struct {
-    TokenType type;
-    char lexeme[MAX_TOKEN_LENGTH];
+    TokenType type;               // Tipo do token
+    char lexeme[MAX_TOKEN_LENGTH]; // Lexema (texto do token)
 } Token;
 
 // Verifica se é uma palavra-chave
