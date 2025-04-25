@@ -244,11 +244,11 @@ void parse_statement(FILE* fp) {
     }else if (current_token.type == TOKEN_IDENTIFIER) {
         Token next = get_next_token(fp);
         if (strcmp(next.lexeme, "=") == 0) {
-            ungetc('=', fp); // volta o '='
+            push_token_to_buffer(next); // Push the token back to the buffer
             parse_assign_expr(fp);
             expect(TOKEN_SYMBOL, ";", fp);
         } else {
-            ungetc(next.lexeme[0], fp); // volta outro token
+            push_token_to_buffer(next); // Push the token back to the buffer
             parse_expression(fp);
             expect(TOKEN_SYMBOL, ";", fp);
         }
