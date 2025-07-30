@@ -287,6 +287,7 @@ void parse_program(FILE* fp) {
     trace_exit("parse_program"); // Rastreia a saída da regra <program>.
 }
 
+
 // ====================== MAIN =======================
 
 // Funções para analisar expressões, termos, fatores, etc.

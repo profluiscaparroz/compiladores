@@ -280,3 +280,24 @@ int main() {
     fclose(fp);
     return 0;
 }
+// Exemplo de código C para testar o analisador
+void a() {
+
+// Exemplo de código correto
+int a = 5;
+int b = 3;
+int c = a + b;  // OK: soma entre inteiros
+
+// Exemplo com erro semântico
+int a1 = 5;
+char* texto = "Oi!";
+int c1 = a1 + texto;  // Erro: soma entre inteiro e ponteiro (ou string)
+
+}
+int soma(int a, int b) {
+    return a + b;
+}
+int funcao() {
+    int a = 10;
+    float b = 2.5;
+}
