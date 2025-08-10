@@ -1,14 +1,14 @@
 # README - Disciplina de Compiladores
 
-Esta disciplina tem como objetivo fornecer uma compreensão profunda sobre os conceitos, técnicas e ferramentas envolvidas na construção de compiladores, desde as linguagens formais até a geração de código otimizado. Ao longo do curso, abordaremos diversos tópicos fundamentais para o desenvolvimento de compiladores modernos, com ênfase em suas várias fases e componentes.
+Esta disciplina tem como objetivo fornecer uma compreensão profunda sobre os conceitos, técnicas e ferramentas envolvidas na construção de compiladores, desde as linguagens formais até a geração de código otimizado. Ao longo do curso, abordaremos diversos tópicos fundamentais para o desenvolvimento de compiladores modernos, com ênfase prática em suas várias fases e componentes através de implementações em linguagem C.
 
 ## Tópicos Abordados
 
 ### 1. Introdução a Compiladores
-A introdução a compiladores apresenta os conceitos básicos sobre o papel de um compilador no processo de tradução de código-fonte de uma linguagem de alto nível para uma linguagem de baixo nível (geralmente código de máquina). Discute-se a importância dos compiladores para a criação de programas eficientes e os principais estágios que compõem o processo de compilação.
+A introdução a compiladores apresenta os conceitos básicos sobre o papel de um compilador no processo de tradução de código-fonte de uma linguagem de alto nível para uma linguagem de baixo nível (geralmente código de máquina ou código intermediário). Discute-se a importância dos compiladores para a criação de programas eficientes e os principais estágios que compõem o processo de compilação: análise léxica, análise sintática, análise semântica, otimização e geração de código.
 
 ### 2. Linguagens Formais
-As linguagens formais são um conjunto de regras para gerar frases válidas em uma linguagem. Elas são fundamentais para a definição da sintaxe de uma linguagem de programação e servem de base para os compiladores. O estudo das linguagens formais envolve o uso de gramáticas, como as gramáticas livres de contexto, que são usadas para descrever a estrutura de linguagens de programação.
+As linguagens formais constituem um conjunto de regras matemáticas para gerar frases válidas em uma linguagem. Elas são fundamentais para a definição rigorosa da sintaxe de uma linguagem de programação e servem de base teórica para os compiladores. O estudo das linguagens formais envolve o uso de gramáticas, especialmente as gramáticas livres de contexto (Tipo 2 na Hierarquia de Chomsky), que são usadas para descrever a estrutura sintática de linguagens de programação modernas.
 
 ### 3. Autômatos Finitos Determinísticos
 Autômatos finitos determinísticos (AFD) são modelos matemáticos usados para reconhecer padrões e linguagens formais. Eles são fundamentais para a análise léxica de um compilador, onde são usados para identificar tokens em uma sequência de caracteres de entrada. Um AFD possui um número finito de estados e transições, com um único estado de transição para cada símbolo de entrada.
@@ -48,5 +48,56 @@ O otimizador de código é responsável por melhorar o código intermediário, r
 
 ### 15. Gerador de Código
 O gerador de código é a fase final do compilador, onde o código intermediário otimizado é convertido em código de máquina ou código para uma linguagem de baixo nível. O gerador de código precisa ser adaptado à arquitetura do processador e à plataforma alvo para garantir a execução correta e eficiente do programa.
+
+---
+
+## 🚀 Exemplos Práticos em C
+
+Cada tópico da disciplina conta com implementações práticas em linguagem C, demonstrando os conceitos teóricos através de código funcional:
+
+### Estrutura do Repositório
+
+```
+├── docs/                          # Documentação teórica detalhada
+│   ├── 02-linguagens-formais/     # Hierarquia de Chomsky e gramáticas
+│   ├── 03-automatos/              # Autômatos finitos e de pilha  
+│   ├── 04-expressao-regular/      # Expressões regulares e aplicações
+│   ├── 05-organizacao-computadores/# Arquitetura e geração de código
+│   └── 07-analisar-lexico/        # Análise léxica e reconhecimento de tokens
+│
+└── src/                           # Implementações práticas em C
+    ├── 02-linguagens-formais/     # Reconhecedores para diferentes tipos de gramáticas
+    ├── 03-automatos/              # Simuladores de AFD e AFN
+    ├── 04-expressao-regular/      # Bibliotecas para processamento de regex
+    ├── 05-organizacao-computadores/# Exemplos de geração de assembly
+    ├── 06-representacao-grafica/  # Visualização de grafos de dependência
+    ├── 07-analisador-lexico/      # Analisador léxico completo
+    ├── 08-analisador-sintatico/   # Parser de expressões
+    └── 09-analisador-semantico/   # Verificação de tipos e escopo
+```
+
+### Características dos Exemplos
+
+- **Implementações didáticas**: Código limpo e bem comentado para facilitar o aprendizado
+- **Progressão gradual**: Exemplos que vão do simples ao complexo
+- **Casos de teste**: Arquivos de entrada para testar as implementações
+- **Documentação detalhada**: Cada exemplo inclui explicação do algoritmo usado
+
+### Como Executar os Exemplos
+
+Cada diretório de código fonte contém programas C que podem ser compilados e executados:
+
+```bash
+# Exemplo: Analisador léxico
+cd src/07-analisador-lexico/
+gcc -o lexer exemploSimples.c
+./lexer
+```
+
+### Pré-requisitos
+
+- Compilador GCC ou Clang
+- Conhecimentos básicos de linguagem C
+- Editor de texto ou IDE para C/C++
 
 ---
