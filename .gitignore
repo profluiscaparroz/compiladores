@@ -1,1 +1,20 @@
-.vscode/settings.json
+# Compilação C
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dll
+
+# Builds locais
+/build/
+**/build/
+
+# macOS / Linux
+.DS_Store
+*.swp
+*.swo
+
+# VSCode
+.vscode/
