@@ -1032,6 +1032,49 @@ A **determinização** envolve considerar todos os possíveis estados que o aut�
 
 **Expressões regulares** são um método compactado de descrever linguagens regulares, e elas são diretamente relacionadas aos **Autômatos Finitos Determinísticos (AFD)**. Qualquer expressão regular pode ser convertida em um AFD. O processo de conversão envolve criar um AFD que aceitaria exatamente a mesma linguagem definida pela expressão regular.
 
+### 14. Minimização de AFDs
+
+A **minimização** é um processo importante que permite reduzir o número de estados de um AFD sem alterar a linguagem que ele reconhece. O objetivo é obter um AFD **equivalente** mas com o **menor número de estados possível**.
+
+#### Algoritmo de Minimização
+
+O processo de minimização envolve:
+
+1. **Eliminar estados inalcançáveis**: Estados que nunca podem ser alcançados a partir do estado inicial.
+2. **Identificar estados equivalentes**: Estados que têm comportamento idêntico para todas as entradas possíveis.
+3. **Mesclar estados equivalentes**: Combinar estados que são equivalentes em um único estado.
+
+#### Vantagens da Minimização
+
+- **Eficiência de memória**: Menor número de estados reduz o uso de memória.
+- **Velocidade de execução**: Menos estados podem resultar em execução mais rápida.
+- **Simplicidade**: AFDs menores são mais fáceis de entender e depurar.
+
+### 15. Limitações dos AFDs
+
+Embora os AFDs sejam muito úteis, eles têm **limitações importantes**:
+
+#### Linguagens que AFDs NÃO podem reconhecer
+
+1. **Linguagem $a^n b^n$**: Palavras com igual número de 'a's seguidas de igual número de 'b's.
+   - Exemplo: "ab", "aabb", "aaabbb"
+   - **Motivo**: Requer "memória" para contar os 'a's, mas AFDs têm memória finita.
+
+2. **Parênteses balanceados**: Sequências como "(())", "()()"
+   - **Motivo**: Precisa de uma "pilha" para verificar o balanceamento.
+
+3. **Palíndromos**: Palavras que são iguais quando lidas de trás para frente.
+   - Exemplo: "aba", "abcba"
+   - **Motivo**: Requer verificação de toda a string simultaneamente.
+
+#### Quando usar AFDs
+
+AFDs são ideais para:
+- **Análise léxica** em compiladores
+- **Validação de formatos simples** (emails, números de telefone)
+- **Busca de padrões** em texto
+- **Protocolos de comunicação simples**
+
 ### 16. Vantagens do AFD
 
 - **Eficiência**: Um AFD pode ser executado em tempo linear em relação ao tamanho da entrada, ou seja, $O(n)$, onde $n$ é o comprimento da string de entrada.
