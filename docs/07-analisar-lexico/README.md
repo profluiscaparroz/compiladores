@@ -673,7 +673,15 @@ Você pode definir uma macro para simplificar a checagem:
 E aí no `if` usaria:
 
 ```c
-if (MATCH_COMPOSITE('=', '=') || MATCH_COMPOSITE('!', '=') || ...)
+if (MATCH_COMPOSITE('=', '=') || MATCH_COMPOSITE('!', '=') || 
+    MATCH_COMPOSITE('<', '=') || MATCH_COMPOSITE('>', '=')) {
+    // Operador composto encontrado
+    token.lexeme[0] = ch;
+    token.lexeme[1] = next;
+    token.lexeme[2] = '\0';
+    token.type = TOKEN_OPERATOR;
+    fgetc(fp); // consome o segundo caractere
+}
 ```
 
 ---
@@ -806,7 +814,25 @@ if (next == '*') {
 ```c
 if (ch == '"') {
     token.type = TOKEN_STRING;
-    ...
+    i = 0;
+    token.lexeme[i++] = ch; // abre aspas
+    
+    while ((ch = fgetc(fp)) != EOF && ch != '"') {
+        if (ch == '\\') {
+            // Caractere escapado - lê o próximo
+            token.lexeme[i++] = ch;
+            if ((ch = fgetc(fp)) != EOF) {
+                token.lexeme[i++] = ch;
+            }
+        } else {
+            token.lexeme[i++] = ch;
+        }
+    }
+    
+    if (ch == '"') {
+        token.lexeme[i++] = ch; // fecha aspas
+    }
+    token.lexeme[i] = '\0';
 }
 ```
 - Lê strings delimitadas por aspas ("), incluindo caracteres escapados (ex.: \").
@@ -814,10 +840,17 @@ if (ch == '"') {
 
 **4. Reconhecer Identificadores e Palavras-Chave**
 ```c
-
-
 if (isalpha(ch) || ch == '_') {
-    ...
+    i = 0;
+    token.lexeme[i++] = ch;
+    
+    while ((ch = fgetc(fp)) != EOF && (isalnum(ch) || ch == '_')) {
+        token.lexeme[i++] = ch;
+    }
+    
+    token.lexeme[i] = '\0';
+    ungetc(ch, fp); // devolve o último caractere lido
+    
     if (is_keyword(token.lexeme)) {
         token.type = TOKEN_KEYWORD;
     } else {
@@ -830,9 +863,25 @@ if (isalpha(ch) || ch == '_') {
 - Verifica se o identificador é uma palavra-chave.
 
 **5. Reconhecer Números**
-```C
+```c
 if (isdigit(ch)) {
-    ...
+    i = 0;
+    token.lexeme[i++] = ch;
+    
+    while ((ch = fgetc(fp)) != EOF && isdigit(ch)) {
+        token.lexeme[i++] = ch;
+    }
+    
+    // Suporte para números de ponto flutuante
+    if (ch == '.') {
+        token.lexeme[i++] = ch;
+        while ((ch = fgetc(fp)) != EOF && isdigit(ch)) {
+            token.lexeme[i++] = ch;
+        }
+    }
+    
+    token.lexeme[i] = '\0';
+    ungetc(ch, fp); // devolve o último caractere lido
     token.type = TOKEN_NUMBER;
 }
 ```
@@ -841,7 +890,20 @@ if (isdigit(ch)) {
 **6. Reconhecer Símbolos**
 ```c
 if (strchr("+-*/=;()", ch)) {
-    ...
+    i = 0;
+    token.lexeme[i++] = ch;
+    
+    // Verifica operadores compostos (==, !=, <=, >=)
+    if (ch == '=' || ch == '!' || ch == '<' || ch == '>') {
+        char next = fgetc(fp);
+        if (next == '=') {
+            token.lexeme[i++] = next;
+        } else {
+            ungetc(next, fp);
+        }
+    }
+    
+    token.lexeme[i] = '\0';
     token.type = TOKEN_SYMBOL;
 }
 ```
