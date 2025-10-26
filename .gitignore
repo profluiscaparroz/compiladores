@@ -18,3 +18,16 @@
 
 # VSCode
 .vscode/
+
+# Test executables
+test1
+test2
+test3
+testBasico
+testBinario
+
+# Automatos examples executables
+exemploAFD
+
+# CodeQL
+_codeql_detected_source_root
