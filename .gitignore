@@ -18,3 +18,8 @@
 
 # VSCode
 .vscode/
+
+# Test executables
+test1
+test2
+test3
