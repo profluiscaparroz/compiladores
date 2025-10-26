@@ -84,7 +84,7 @@ O século XXI trouxe novos desafios e avanços:
 
 - **Compilação incremental e ferramentas interativas**: IDEs modernos compilam código continuamente, oferecendo feedback instantâneo.
 
-- **Machine Learning em compiladores**: Técnicas de aprendizado de máquina começam a ser usadas para decidir otimizações, prever comportamento de cache e melhorar alocação de registradores.
+- **Aprendizado de Máquina em compiladores**: Técnicas de aprendizado de máquina começam a ser usadas para decidir otimizações, prever comportamento de cache e melhorar alocação de registradores.
 
 Desde então, a **teoria de compilação** continua evoluindo, integrando verificação formal, análise estática avançada para segurança, e adaptação a arquiteturas heterogêneas (CPUs + GPUs + FPGAs + ASICs).
 
@@ -295,10 +295,10 @@ Esta arquitetura modular facilita:
 
 #### Tendências Atuais e Futuras
 
-**Machine Learning em Compilação**:
-- **Predictive modeling**: Usar ML para prever melhor sequência de otimizações para cada função.
-- **Phase ordering**: Determinar ordem ideal de passes de otimização.
-- **Autotuning**: Ajustar automaticamente parâmetros como thresholds de inlining.
+**Aprendizado de Máquina em Compilação**:
+- **Modelagem preditiva**: Usar aprendizado de máquina para prever melhor sequência de otimizações para cada função.
+- **Ordenação de fases**: Determinar ordem ideal de passes de otimização.
+- **Ajuste automático**: Ajustar automaticamente parâmetros como thresholds de inlining.
 
 **Compilação para Arquiteturas Emergentes**:
 - **Neuromorphic computing**: Hardware inspirado em cérebros (IBM TrueNorth, Intel Loihi).
