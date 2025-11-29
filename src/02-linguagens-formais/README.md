@@ -80,7 +80,77 @@ No desenvolvimento de compiladores, diferentes níveis da hierarquia são utiliz
 2. **Análise Sintática**: utiliza linguagens livres de contexto e autômatos de pilha para verificar a estrutura do programa
 3. **Análise Semântica**: pode requerer linguagens sensíveis ao contexto para verificações de tipo e escopo
 
-## Exercícios
+## Fundamentos Teóricos Avançados
+
+### Propriedades de Fechamento
+
+As propriedades de fechamento são fundamentais para a compreensão teórica e prática das linguagens formais. Segundo Hopcroft et al. (2001) e Sipser (2013), uma classe de linguagens é **fechada** sob uma operação se, ao aplicar essa operação a linguagens da classe, o resultado permanece na mesma classe.
+
+**Linguagens Regulares** são fechadas sob:
+- União, Concatenação, Estrela de Kleene (por definição de expressões regulares)
+- Complemento (se L é regular, então Σ* - L também é regular)
+- Interseção (via De Morgan: L₁ ∩ L₂ = (L₁ᶜ ∪ L₂ᶜ)ᶜ)
+- Diferença, Reverso, Homomorfismo e Homomorfismo Inverso
+
+**Linguagens Livres de Contexto** são fechadas sob:
+- União, Concatenação, Estrela de Kleene
+- Homomorfismo e Homomorfismo Inverso
+- NÃO são fechadas sob interseção e complemento (Bar-Hillel et al., 1961)
+
+### Teorema de Myhill-Nerode
+
+O **Teorema de Myhill-Nerode** (Myhill, 1957; Nerode, 1958) fornece uma caracterização alternativa das linguagens regulares usando relações de equivalência:
+
+Uma linguagem L ⊆ Σ* é regular se e somente se a relação de equivalência ≡_L, definida por:
+> x ≡_L y ⟺ (∀z ∈ Σ*: xz ∈ L ⟺ yz ∈ L)
+
+tem um número finito de classes de equivalência. Além disso, o número de classes é igual ao número mínimo de estados de qualquer AFD que reconhece L.
+
+Este teorema é particularmente útil para provar que linguagens NÃO são regulares, fornecendo uma alternativa ao Lema do Bombeamento. Por exemplo, para L = {aⁿbⁿ | n ≥ 0}, as palavras a, aa, aaa, ... pertencem a classes de equivalência distintas (infinitas classes), logo L não é regular.
+
+### Lema de Ogden
+
+O **Lema de Ogden** (Ogden, 1968) é uma generalização do Lema do Bombeamento para linguagens livres de contexto. Enquanto o Lema do Bombeamento padrão para LLC pode falhar em demonstrar que certas linguagens não são livres de contexto, o Lema de Ogden introduz a noção de "marcar" posições especiais na palavra, permitindo provas mais sofisticadas.
+
+**Enunciado**: Para toda LLC L, existe uma constante n tal que, para toda palavra z ∈ L com pelo menos n posições marcadas, z pode ser decomposta como z = uvwxy, satisfazendo:
+1. vwx contém no máximo n posições marcadas
+2. vx contém pelo menos uma posição marcada
+3. Para todo i ≥ 0, uvⁱwxⁱy ∈ L
+
+### Formas Normais de Gramáticas
+
+A **Forma Normal de Chomsky (FNC)** e a **Forma Normal de Greibach (FNG)** são representações canônicas de gramáticas livres de contexto com propriedades úteis:
+
+**Forma Normal de Chomsky** (Chomsky, 1959):
+- Todas as produções são da forma A → BC ou A → a
+- Facilita o algoritmo CYK (Cocke-Younger-Kasami) para parsing em O(n³)
+- Demonstra que toda LLC pode ser reconhecida em tempo polinomial
+
+**Forma Normal de Greibach** (Greibach, 1965):
+- Todas as produções são da forma A → aα, onde a ∈ Σ e α ∈ V*
+- Elimina recursão à esquerda
+- Cada derivação consome exatamente um terminal por passo
+- Útil para parsers LL
+
+### Problema da Ambiguidade
+
+Uma gramática é **ambígua** se existe alguma palavra que possui mais de uma árvore de derivação (ou mais de uma derivação mais à esquerda). O problema de determinar se uma gramática é ambígua é **indecidível** (Cantor, 1962; Floyd, 1962).
+
+Segundo Aho et al. (2006), a ambiguidade é particularmente problemática em linguagens de programação:
+- A famosa ambiguidade do **dangling else**: `if (a) if (b) S1; else S2;` — o else pertence a qual if?
+- Expressões como `a - b - c`: associatividade à esquerda vs. à direita
+
+Linguagens como C e Java resolvem ambiguidades através de regras de precedência e associatividade especificadas na documentação da linguagem.
+
+### Linguagens Inerentemente Ambíguas
+
+Uma linguagem é **inerentemente ambígua** se toda gramática que a gera é ambígua. Parikh (1966) demonstrou que a linguagem:
+
+> L = {aⁿbⁿcᵐdᵐ | n, m ≥ 1} ∪ {aⁿbᵐcᵐdⁿ | n, m ≥ 1}
+
+é inerentemente ambígua. Isso tem implicações profundas: não importa quão cuidadosamente projetemos uma gramática para L, sempre haverá palavras com múltiplas derivações.
+
+## Exercícios Básicos
 
 1) Classifique as linguagens abaixo segundo Chomsky e justifique:
    - L1 = { aⁿbⁿ | n ≥ 0 } - Tipo-2 (livre de contexto, requer pilha)
@@ -92,6 +162,308 @@ No desenvolvimento de compiladores, diferentes níveis da hierarquia são utiliz
 
 3) Explique por que { aⁿbⁿ | n ≥ 0 } não é regular usando o Lema do Bombeamento.
    Demonstração: Suponha que L é regular com constante de bombeamento p. Considere w = aᵖbᵖ. Pelo lema, w = xyz com |xy| ≤ p e |y| > 0. Logo, y consiste apenas de a's. Bombeando para k=0, obtemos xz = aᵖ⁻|y|bᵖ, que não pertence a L, contradição.
+
+## Exercícios Avançados
+
+4) **Teorema de Myhill-Nerode**: Use o Teorema de Myhill-Nerode para provar que L = {ww | w ∈ {a,b}*} não é regular.
+
+   **Solução**: Considere as palavras aⁱ para i = 0, 1, 2, ... Precisamos mostrar que aⁱ e aʲ (com i ≠ j) pertencem a classes de equivalência distintas sob ≡_L.
+   
+   Para aⁱ, o sufixo z = aⁱ resulta em aⁱaⁱ = a²ⁱ ∈ L (pois a²ⁱ = aⁱaⁱ).
+   Para aʲ com j ≠ i, o mesmo sufixo z = aⁱ resulta em aʲaⁱ. Se j ≠ i, então aʲaⁱ ∉ L (não pode ser escrito como ww para nenhum w).
+   
+   Logo, existem infinitas classes de equivalência, e L não é regular.
+
+5) **Lema de Ogden**: Prove que L = {aⁿbⁿcⁿ | n ≥ 1} não é livre de contexto usando o Lema do Bombeamento para LLC.
+
+   **Solução**: Seja p a constante do bombeamento. Considere z = aᵖbᵖcᵖ ∈ L. Pelo lema, z = uvwxy com |vwx| ≤ p e |vx| > 0.
+   
+   Como |vwx| ≤ p, a substring vwx não pode conter simultaneamente a's e c's (a distância entre o último 'a' e o primeiro 'c' é p). Logo, vx contém no máximo dois tipos de símbolos.
+   
+   Bombeando para i = 0 (uwy) ou i = 2 (uv²wx²y), obtemos uma palavra onde as contagens de a's, b's e c's não são iguais, contradizendo a pertinência a L.
+
+6) **Forma Normal de Chomsky**: Converta a gramática G = ({S, A}, {a, b}, P, S) para FNC, onde P:
+   - S → aAb | ab
+   - A → aAb | ab
+   
+   **Solução**: 
+   Passo 1: Substituir terminais em produções longas
+   - Introduzir T_a → a, T_b → b
+   
+   Passo 2: Eliminar produções com mais de 2 não-terminais
+   - S → T_a X₁ | T_a T_b, onde X₁ → A T_b
+   - A → T_a X₁ | T_a T_b
+   
+   Gramática em FNC:
+   - S → T_a X₁ | T_a T_b
+   - A → T_a X₁ | T_a T_b
+   - X₁ → A T_b
+   - T_a → a
+   - T_b → b
+
+7) **Ambiguidade**: Mostre que a gramática E → E + E | E * E | (E) | id é ambígua e proponha uma gramática não-ambígua equivalente.
+
+   **Solução**: A gramática é ambígua porque a expressão "id + id * id" tem duas árvores de derivação distintas:
+   
+   Árvore 1: E → E + E → id + E → id + E * E → id + id * id (+ primeiro)
+   Árvore 2: E → E * E → E + E * E → id + id * id (* primeiro)
+   
+   Gramática não-ambígua (com precedência e associatividade à esquerda):
+   - E → E + T | T
+   - T → T * F | F
+   - F → (E) | id
+   
+   Esta gramática força * a ter maior precedência que +, e ambos são associativos à esquerda.
+
+8) **Pumping Lemma avançado**: Prove que L = {aⁱbʲcᵏ | i = j ou j = k, mas não ambos} não é livre de contexto.
+
+   **Solução**: Esta é uma linguagem complexa que requer técnicas avançadas.
+   
+   **Estratégia usando Lema de Ogden**:
+   Seja n a constante do Lema de Ogden. Considere a palavra z = aⁿbⁿc²ⁿ ∈ L (pois i = j = n, mas j ≠ k = 2n).
+   
+   Marque todas as posições dos b's (n posições marcadas). Pelo Lema de Ogden, z = uvwxy onde:
+   - vwx contém no máximo n posições marcadas (então está contida em uma região limitada)
+   - vx contém pelo menos uma posição marcada (ao menos um b em vx)
+   
+   **Caso 1**: Se vx contém apenas b's, bombear para i=2 aumenta o número de b's, quebrando i=j.
+   **Caso 2**: Se vx contém a's e b's, bombear altera desigualmente, também quebrando a condição.
+   **Caso 3**: Se vx contém b's e c's, análise similar leva a contradição.
+   
+   Em todos os casos, a palavra bombeada viola a condição "i = j ou j = k, mas não ambos".
+   
+   Para uma prova completa e formal, consulte Hopcroft et al. (2001), Capítulo 7, ou Sipser (2013), seção sobre propriedades de fechamento de LLCs.
+
+## Problemas Práticos do Dia-a-Dia (Estilo StackOverflow)
+
+Esta seção apresenta problemas reais que desenvolvedores enfrentam e que podem ser resolvidos com conhecimento de linguagens formais e teoria de compiladores.
+
+### Problema 1: Validação de Expressões com Parênteses Balanceados
+
+**Contexto (StackOverflow #3426427 e similares)**: "Preciso validar se uma expressão matemática tem parênteses, colchetes e chaves corretamente balanceados. Regex não funciona. Por quê?"
+
+**Por que Regex não funciona**: 
+Expressões regulares correspondem a linguagens regulares (Tipo 3). O balanceamento de parênteses requer "lembrar" quantos parênteses abertos existem — informação ilimitada que autômatos finitos não podem armazenar. A linguagem L = {(ⁿ)ⁿ | n ≥ 0} é livre de contexto (Tipo 2), não regular.
+
+**Solução correta**: Usar um autômato de pilha (implementação com pilha explícita):
+```c
+bool balanceado(const char* expr) {
+    Stack* pilha = stack_create();
+    for (int i = 0; expr[i]; i++) {
+        char c = expr[i];
+        if (c == '(' || c == '[' || c == '{') {
+            stack_push(pilha, c);
+        } else if (c == ')' || c == ']' || c == '}') {
+            if (stack_empty(pilha)) {
+                stack_destroy(pilha);
+                return false;
+            }
+            char topo = stack_pop(pilha);
+            if ((c == ')' && topo != '(') ||
+                (c == ']' && topo != '[') ||
+                (c == '}' && topo != '{')) {
+                stack_destroy(pilha);
+                return false;
+            }
+        }
+    }
+    bool resultado = stack_empty(pilha);
+    stack_destroy(pilha);
+    return resultado;
+}
+```
+
+**Lição**: Conhecer a hierarquia de Chomsky evita horas tentando fazer regex funcionar para problemas impossíveis.
+
+### Problema 2: Parser de Configuração com Aninhamento
+
+**Contexto (StackOverflow #tagged/parsing)**: "Meu arquivo de configuração permite blocos aninhados como `group { server { host: ... } }`. Minha solução com string.split() não funciona para aninhamento profundo."
+
+**Análise teórica**: 
+Estruturas aninhadas são inerentemente livres de contexto. Abordagens baseadas apenas em expressões regulares (split, regex) falham porque não podem rastrear níveis de aninhamento arbitrários.
+
+**Solução**: Implementar um parser descendente recursivo:
+```c
+// Gramática: Config → Block* ; Block → ID "{" Config "}" | ID ":" Value
+Node* parse_config(Lexer* lex) {
+    Node* root = node_create(CONFIG);
+    while (!lex_eof(lex) && !lex_peek(lex, "}")) {
+        node_add_child(root, parse_block(lex));
+    }
+    return root;
+}
+
+Node* parse_block(Lexer* lex) {
+    Token* id = lex_expect(lex, TOKEN_ID);
+    if (lex_match(lex, "{")) {
+        Node* block = node_create_with_name(BLOCK, id->lexeme);
+        Node* nested_config = parse_config(lex);
+        node_add_child(block, nested_config);  // Adiciona config aninhada como filho
+        lex_expect(lex, "}");
+        return block;
+    } else {
+        lex_expect(lex, ":");
+        Token* val = lex_expect(lex, TOKEN_VALUE);
+        return node_create_keyval(id->lexeme, val->lexeme);
+    }
+}
+```
+
+### Problema 3: Extrair Strings de Código Fonte
+
+**Contexto (StackOverflow #tagged/regex+parsing)**: "Preciso extrair todas as strings literais de um código JavaScript, mas minha regex falha com strings contendo aspas escapadas como `"ele disse \"olá\""` ou strings dentro de comentários."
+
+**Por que é complexo**:
+1. Strings podem conter aspas escapadas: `"abc\"def"`
+2. Strings dentro de comentários não devem ser capturadas
+3. JavaScript tem template literals com interpolação: `` `${expr}` ``
+
+**Análise**: 
+Um lexer adequado precisa de estados (normal, dentro_string, dentro_comentario) — essencialmente um autômato finito com semântica mais rica. A regex simples `"[^"]*"` falha miseravelmente.
+
+**Solução**: Implementar análise léxica correta:
+```c
+Token* scan_string(Lexer* lex) {
+    char quote = lex_advance(lex); // " ou '
+    StringBuilder* sb = sb_create();
+    while (!lex_eof(lex)) {
+        char c = lex_advance(lex);
+        if (c == '\\') {
+            sb_append(sb, lex_advance(lex)); // caractere escapado
+        } else if (c == quote) {
+            return token_create(TOKEN_STRING, sb_to_string(sb));
+        } else {
+            sb_append(sb, c);
+        }
+    }
+    return token_error("String não terminada");
+}
+```
+
+### Problema 4: Validar Identificadores de Variáveis
+
+**Contexto (StackOverflow #13875205 e similares)**: "Qual regex valida identificadores válidos em C? Preciso aceitar `_var1` mas rejeitar `1var`."
+
+**Solução com teoria formal**:
+Identificadores em C são uma linguagem regular:
+- Primeiro caractere: letra ou underscore [a-zA-Z_]
+- Caracteres seguintes: letra, dígito ou underscore [a-zA-Z0-9_]*
+
+**Expressão regular**: `[a-zA-Z_][a-zA-Z0-9_]*`
+
+**AFD correspondente**:
+```
+Estado inicial: q0
+q0 --[a-zA-Z_]--> q1 (aceitação)
+q1 --[a-zA-Z0-9_]--> q1
+q0 --[0-9]--> q_erro (rejeição: não pode começar com dígito)
+```
+
+Este é um exemplo clássico onde a teoria (expressões regulares = autômatos finitos) se aplica diretamente.
+
+### Problema 5: Avaliação de Expressões Matemáticas
+
+**Contexto (StackOverflow #tagged/expression-evaluation)**: "Preciso avaliar expressões como `3 + 4 * 2 / (1 - 5)^2` respeitando precedência de operadores."
+
+**Por que é um problema de compiladores**:
+1. Tokenização: separar números, operadores, parênteses
+2. Parsing: construir árvore respeitando precedência (^ > */ > +-)
+3. Avaliação: percorrer árvore em pós-ordem
+
+**Gramática para expressões (não-ambígua)**:
+```
+Expr   → Term (('+' | '-') Term)*
+Term   → Factor (('*' | '/') Factor)*
+Factor → Base ('^' Factor)?        // ^ é associativo à direita
+Base   → NUMBER | '(' Expr ')'
+```
+
+**Algoritmo Shunting-Yard** (Dijkstra, 1961):
+Converte notação infixa para pós-fixa usando pilha de operadores, respeitando precedência e associatividade. É uma aplicação direta de autômatos de pilha.
+
+### Problema 6: Detectar Código Morto
+
+**Contexto (StackOverflow #tagged/dead-code)**: "Como detectar automaticamente código que nunca será executado no meu programa?"
+
+**Conexão com teoria**:
+- Análise de alcançabilidade em grafos de fluxo de controle (CFG)
+- Construir CFG é análise sintática + semântica
+- Encontrar nós não alcançáveis a partir do nó inicial é busca em grafo
+
+**Limitação teórica**:
+O problema geral é **indecidível** (redutível ao Problema da Parada). Se pudéssemos detectar todo código morto, poderíamos resolver o Problema da Parada:
+```c
+void f() {
+    if (programa_termina(P, X)) {
+        codigo_aqui();  // morto sse P não termina em X
+    }
+}
+```
+
+Compiladores usam aproximações conservadoras: detectam código obviamente morto (após `return`, condições constantes `if (false)`), mas podem não detectar casos sutis.
+
+### Problema 7: Syntax Highlighting em Editores
+
+**Contexto (StackOverflow #tagged/syntax-highlighting)**: "Por que o syntax highlighting do meu editor às vezes erra, especialmente em strings multi-linha ou comentários aninhados?"
+
+**Explicação teórica**:
+A maioria dos editores usa expressões regulares (linguagens Tipo 3) para highlighting por performance. Porém:
+- Strings multi-linha requerem rastrear estado entre linhas
+- Comentários aninhados `/* /* */ */` requerem contagem (Tipo 2)
+- Template literals com interpolação `${...}` requerem pilha
+
+**Solução moderna**: 
+Editores como VSCode usam gramáticas TextMate (basicamente regex com estados) ou parsers incrementais (Tree-sitter) que mantêm AST parcial atualizada.
+
+### Problema 8: Injeção de SQL e Sanitização
+
+**Contexto (StackOverflow #tagged/sql-injection)**: "Por que concatenar strings para SQL é perigoso? `query = 'SELECT * FROM users WHERE id = ' + user_input`"
+
+**Análise sob ótica de linguagens formais**:
+O problema é que `user_input` pode conter tokens que alteram a estrutura sintática da query. Se `user_input = "1; DROP TABLE users; --"`, a query resultante tem estrutura completamente diferente da pretendida.
+
+**A gramática de SQL** é livre de contexto. Quando concatenamos strings, estamos essencialmente tentando compor gramáticas de forma ad-hoc, sem garantias.
+
+**Solução correta — Prepared Statements**:
+```sql
+PREPARE stmt FROM 'SELECT * FROM users WHERE id = ?';
+EXECUTE stmt USING @user_input;
+```
+
+O parser processa a query estruturalmente primeiro, depois substitui parâmetros como dados (não código). A separação entre análise sintática e dados é fundamental.
+
+### Problema 9: Migração de Código entre Linguagens
+
+**Contexto**: "Preciso converter 100.000 linhas de código de Python 2 para Python 3. Substituição textual não funciona."
+
+**Por que é um problema de compiladores**:
+- A transformação precisa entender a estrutura do código (AST)
+- Algumas mudanças são contextuais: `print x` → `print(x)` mas `print(x, y)` permanece
+- Tipos e semântica importam: `unicode` → `str`, divisão inteira vs. real
+
+**Solução**: Ferramentas como **2to3** (Python) ou **jscodeshift** (JavaScript) operam no nível de AST:
+1. Parse do código fonte → AST
+2. Transformações na AST (padrões → substituições)
+3. Geração de código a partir da AST modificada
+
+Este é compilação source-to-source (transpilação), aplicando diretamente conceitos de análise sintática e geração de código.
+
+### Problema 10: Performance de Regex
+
+**Contexto (StackOverflow #tagged/regex-performance)**: "Minha regex `(a+)+b` causa timeout em strings como `aaaaaaaaaaaaaac`. Por quê?"
+
+**Análise com teoria de autômatos**:
+A regex `(a+)+b` é patológica. O motor de regex (que usa backtracking, não AFD puro) tenta exponencialmente muitas formas de particionar os a's entre os grupos `(a+)` antes de falhar.
+
+Para string "a" × n seguida de "c":
+- Número de tentativas ≈ 2ⁿ (catastrófico!)
+
+**Solução**:
+1. Simplificar regex: `(a+)+b` = `a+b` (equivalente, linear)
+2. Usar motores baseados em AFD (RE2, rust/regex) que garantem O(n)
+3. Entender que regex com grupos aninhados + quantificadores pode ter complexidade exponencial
+
+**Lição**: Conhecer a teoria (AFN → AFD, backtracking vs. Thompson NFA) ajuda a escrever regex eficientes e evitar ReDoS (Regular Expression Denial of Service).
 
 ## Leituras Sugeridas
 
@@ -106,6 +478,13 @@ No desenvolvimento de compiladores, diferentes níveis da hierarquia são utiliz
 - **Chomsky, N.** (1959). "On certain formal properties of grammars". *Information and Control*, 2(2), 137-167.
 - **Turing, A. M.** (1936). "On computable numbers, with an application to the Entscheidungsproblem". *Proceedings of the London Mathematical Society*, 2(1), 230-265.
 - **Kleene, S. C.** (1956). "Representation of events in nerve nets and finite automata". *Automata Studies*, 34, 3-41.
+- **Myhill, J.** (1957). "Finite automata and the representation of events". *WADD Technical Report*, 57-624.
+- **Nerode, A.** (1958). "Linear automaton transformations". *Proceedings of the American Mathematical Society*, 9(4), 541-544.
+- **Ogden, W.** (1968). "A helpful result for proving inherent ambiguity". *Mathematical Systems Theory*, 2(3), 191-194.
+- **Greibach, S. A.** (1965). "A new normal-form theorem for context-free phrase structure grammars". *Journal of the ACM*, 12(1), 42-52.
+- **Bar-Hillel, Y., Perles, M., & Shamir, E.** (1961). "On formal properties of simple phrase structure grammars". *Zeitschrift für Phonetik, Sprachwissenschaft und Kommunikationsforschung*, 14, 143-172.
+- **Parikh, R. J.** (1966). "On context-free languages". *Journal of the ACM*, 13(4), 570-581.
+- **Dijkstra, E. W.** (1961). "Algol 60 translation: An algol 60 translator for the x1 and making a translator for algol 60". *Report MR 35/61*, Mathematisch Centrum, Amsterdam.
 
 ## Implementações em C
 
