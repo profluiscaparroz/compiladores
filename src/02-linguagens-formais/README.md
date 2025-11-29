@@ -217,13 +217,22 @@ Uma linguagem é **inerentemente ambígua** se toda gramática que a gera é amb
 
 8) **Pumping Lemma avançado**: Prove que L = {aⁱbʲcᵏ | i = j ou j = k, mas não ambos} não é livre de contexto.
 
-   **Solução**: Esta é uma linguagem complexa. Podemos usar o Lema de Ogden ou o fato de que LLC são fechadas sob interseção com linguagens regulares.
+   **Solução**: Esta é uma linguagem complexa que requer técnicas avançadas.
    
-   Considere L' = L ∩ a*b*c* (interseção com regular). Se L fosse LLC, L' também seria.
+   **Estratégia usando Lema de Ogden**:
+   Seja n a constante do Lema de Ogden. Considere a palavra z = aⁿbⁿc²ⁿ ∈ L (pois i = j = n, mas j ≠ k = 2n).
    
-   Note que L' = {aⁿbⁿcᵐ | n ≠ m} ∪ {aᵐbⁿcⁿ | m ≠ n}.
+   Marque todas as posições dos b's (n posições marcadas). Pelo Lema de Ogden, z = uvwxy onde:
+   - vwx contém no máximo n posições marcadas (então está contida em uma região limitada)
+   - vx contém pelo menos uma posição marcada (ao menos um b em vx)
    
-   Usando o Lema do Bombeamento para LLC em palavras como aᵖbᵖcᵖ⁺ᵖ! (cuidadosamente escolhidas), podemos derivar uma contradição, provando que L não é LLC.
+   **Caso 1**: Se vx contém apenas b's, bombear para i=2 aumenta o número de b's, quebrando i=j.
+   **Caso 2**: Se vx contém a's e b's, bombear altera desigualmente, também quebrando a condição.
+   **Caso 3**: Se vx contém b's e c's, análise similar leva a contradição.
+   
+   Em todos os casos, a palavra bombeada viola a condição "i = j ou j = k, mas não ambos".
+   
+   Para uma prova completa e formal, consulte Hopcroft et al. (2001), Capítulo 7, ou Sipser (2013), seção sobre propriedades de fechamento de LLCs.
 
 ## Problemas Práticos do Dia-a-Dia (Estilo StackOverflow)
 
@@ -245,15 +254,22 @@ bool balanceado(const char* expr) {
         if (c == '(' || c == '[' || c == '{') {
             stack_push(pilha, c);
         } else if (c == ')' || c == ']' || c == '}') {
-            if (stack_empty(pilha)) return false;
+            if (stack_empty(pilha)) {
+                stack_destroy(pilha);
+                return false;
+            }
             char topo = stack_pop(pilha);
             if ((c == ')' && topo != '(') ||
                 (c == ']' && topo != '[') ||
-                (c == '}' && topo != '{'))
+                (c == '}' && topo != '{')) {
+                stack_destroy(pilha);
                 return false;
+            }
         }
     }
-    return stack_empty(pilha);
+    bool resultado = stack_empty(pilha);
+    stack_destroy(pilha);
+    return resultado;
 }
 ```
 
@@ -281,7 +297,8 @@ Node* parse_block(Lexer* lex) {
     Token* id = lex_expect(lex, TOKEN_ID);
     if (lex_match(lex, "{")) {
         Node* block = node_create_with_name(BLOCK, id->lexeme);
-        block->children = parse_config(lex);
+        Node* nested_config = parse_config(lex);
+        node_add_child(block, nested_config);  // Adiciona config aninhada como filho
         lex_expect(lex, "}");
         return block;
     } else {
