@@ -505,11 +505,12 @@ Onde:
 
 ### Por Que C Usa POSIX Regex (Relativamente Lento)?
 
-A biblioteca padrão C (`regex.h`) usa **NFA com backtracking** porque:
-1. **Histórico**: POSIX definiu antes das otimizações modernas
-2. **Compatibilidade**: Manter comportamento esperado
-3. **Features**: Suportar backreferences e grupos de captura
-4. **Simplicidade**: Implementação mais simples que DFA otimizado
+A biblioteca padrão C (`regex.h`) segue a especificação POSIX e, em muitas implementações,
+é baseada em **NFA simulada no estilo Thompson (geralmente sem backtracking explícito)**:
+1. **Histórico/Padronização**: POSIX foi definido antes de engines modernas como PCRE/RE2
+2. **Compatibilidade**: Manter comportamento consistente entre sistemas Unix/POSIX
+3. **Previsibilidade**: Focar em semântica bem definida e desempenho geralmente linear em vez de features avançadas
+4. **Simplicidade relativa**: Mais simples de implementar e padronizar do que DFAs altamente otimizados e cheios de extensões
 
 Para **máxima performance em C**, use bibliotecas como:
 - **RE2** (C++ com binding C)
