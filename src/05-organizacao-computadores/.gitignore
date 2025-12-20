@@ -1,0 +1,18 @@
+# Compiled binaries
+exemploSomaSimplesAssmbly
+exemploRegistradores
+exemploModosEnderecamento
+exemploCallingConvention
+
+# Assembly output files
+*.s
+
+# Object files
+*.o
+
+# Backup files
+*.bak
+
+# Editor temporary files
+*~
+.*.swp
