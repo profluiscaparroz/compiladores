@@ -706,7 +706,7 @@ Este diretório contém implementações em C que demonstram diferentes aspectos
 
 9. **8exemploValidacaoIp4.c**: Validação de endereços IPv4
    - Regex complexa para validar formato
-   - Verificação de ranges (0-255)
+   - Validação básica do formato IPv4 (quatro octetos numéricos separados por ponto)
 
 ### Como Compilar e Executar
 
