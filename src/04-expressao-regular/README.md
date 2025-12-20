@@ -477,7 +477,7 @@ Para textos grandes:
 ```
 Feature                    Custo
 -----------------------------------------------
-Literal simple (abc)       O(n) — Muito rápido
+Literal simples (abc)      O(n) — Muito rápido
 Classes [a-z]              O(n) — Rápido
 Alternação (a|b|c)         O(n) — Rápido (DFA) ou O(n×m) (NFA)
 Quantificadores *+?        O(n) — Rápido (DFA) ou O(2^n) (NFA)
