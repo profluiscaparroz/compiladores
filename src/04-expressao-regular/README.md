@@ -729,6 +729,8 @@ make clean
 ### Estrutura de Dados Sugerida para Implementação de Thompson
 
 ```c
+#include <stdbool.h>
+
 typedef struct State {
     int id;
     bool is_final;
