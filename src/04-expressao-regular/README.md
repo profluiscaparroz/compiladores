@@ -180,6 +180,7 @@ q2            {2}             a→q2, b→q0
 Uma vez construído o AFD, o reconhecimento de uma string é **extremamente simples e eficiente**:
 
 ```c
+#include <stdbool.h>
 bool match(AFD *afd, const char *texto) {
     int estado = afd->estado_inicial;
     
