@@ -391,7 +391,32 @@ Token get_next_token(FILE* fp, int* line, int* column) {
 
             if (i >= MAX_TOKEN_LENGTH - 2) {
                 fprintf(stderr, "Erro: String muito longa na linha %d\n", *line);
-                exit(1);
+                token.type = TOKEN_UNKNOWN;
+
+                /* Consumir até o fim da string ou EOF para tentar recuperar */
+                while ((ch = fgetc(fp)) != EOF) {
+                    (*column)++;
+                    if (ch == '\\') {
+                        /* pular caractere escapado */
+                        int esc = fgetc(fp);
+                        if (esc == EOF) {
+                            break;
+                        }
+                        (*column)++;
+                    } else if (ch == '"') {
+                        break;
+                    } else if (ch == '\n') {
+                        (*line)++;
+                        *column = 1;
+                    }
+                }
+
+                /* Garante terminação da string armazenada, mesmo truncada */
+                if (i >= MAX_TOKEN_LENGTH) {
+                    i = MAX_TOKEN_LENGTH - 1;
+                }
+                token.lexeme[i] = '\0';
+                return token;
             }
         }
 
