@@ -950,8 +950,17 @@ typedef struct {
 #define CACHE_SIZE 256
 CacheEntry token_cache[CACHE_SIZE] = {0};  // Inicializa todas as entradas como inválidas
 
+// Função hash específica para cache (retorna índice direto)
+unsigned int hash_for_cache(const char* str) {
+    unsigned int h = 0;
+    while (*str) {
+        h = (h << 5) + h + *str++;
+    }
+    return h % CACHE_SIZE;
+}
+
 Token* lookup_cache(const char* lexeme) {
-    unsigned int h = hash(lexeme) % CACHE_SIZE;
+    unsigned int h = hash_for_cache(lexeme);
     if (token_cache[h].valid && strcmp(token_cache[h].lexeme, lexeme) == 0) {
         return &token_cache[h].token;
     }
@@ -961,10 +970,11 @@ Token* lookup_cache(const char* lexeme) {
 void cache_token(const char* lexeme, Token token) {
     if (!lexeme) return;  // Validação de entrada
     
-    unsigned int h = hash(lexeme) % CACHE_SIZE;
+    unsigned int h = hash_for_cache(lexeme);
     
     // Garante terminação nula mesmo se lexeme for muito longo
-    size_t len = strlen(lexeme);
+    // Usa strnlen para evitar escanear strings muito longas
+    size_t len = strnlen(lexeme, MAX_TOKEN_LENGTH);
     if (len >= MAX_TOKEN_LENGTH) {
         len = MAX_TOKEN_LENGTH - 1;
     }
