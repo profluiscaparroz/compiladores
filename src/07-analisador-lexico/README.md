@@ -549,8 +549,8 @@ int main(int argc, char* argv[]) {
     int line = 1, column = 1;
     Token token;
 
-    printf("%-15s %-20s %s\n", "TIPO", "LEXEMA", "POSIÇÃO");
-    printf("%-15s %-20s %s\n", "----", "------", "--------");
+    printf("%-15s %-20s %s\n", "TIPO", "LEXEMA", "POSIÇÃO (L:C)");
+    printf("%-15s %-20s %s\n", "----", "------", "--------------");
 
     do {
         token = get_next_token(fp, &line, &column);
