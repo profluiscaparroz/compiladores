@@ -57,7 +57,7 @@ Um **token** representa uma **categoria de símbolo léxico**, ou seja, uma unid
 
 ### Diferença entre Símbolo, Lexema e Token
 
-**Andrew W. Appel** (1997), em "Modern Compiler Implementation", enfatiza a distinção clara entre estes conceitos:
+**Andrew W. Appel** (2002), em "Modern Compiler Implementation", enfatiza a distinção clara entre estes conceitos:
 
 | Termo | Definição | Exemplo |
 |-------|-----------|---------|
