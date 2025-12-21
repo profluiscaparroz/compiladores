@@ -114,10 +114,7 @@ Cada tipo de token pode ser descrito por uma **expressão regular**:
 
 ### Autômatos Finitos
 
-**Kenneth C. Louden** (1997), em "Compiler Construction: Principles and Practice", explica:
-
-> "O scanner é responsável por identificar os padrões léxicos, ignorar caracteres irrelevantes, e reconhecer erros primitivos no texto-fonte."
-
+Segundo **Kenneth C. Louden** (1997), em *Compiler Construction: Principles and Practice*, o scanner é responsável por identificar os padrões léxicos, ignorar caracteres irrelevantes e reconhecer erros primitivos no texto-fonte.
 As expressões regulares são implementadas através de **autômatos finitos**:
 
 #### Autômato Finito Determinístico (AFD)
