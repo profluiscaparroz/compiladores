@@ -1174,7 +1174,7 @@ EOF             EOF                  12:2
 11. **Flex Documentation**: https://github.com/westes/flex
     - Manual completo do Flex
     
-12. **JFLAP**: http://www.jflap.org/
+12. **JFLAP**: https://www.jflap.org/
     - Software educacional para visualização de autômatos
 
 ---
