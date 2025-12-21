@@ -820,17 +820,20 @@ typedef struct {
     FILE* fp;
 } DoubleBuffer;
 
-char next_char(DoubleBuffer* db) {
+int next_char(DoubleBuffer* db) {
     if (db->pos >= BUFFER_SIZE) {
         // Trocar buffer e recarregar
         db->current = 1 - db->current;
         db->pos = 0;
-        fread(db->current ? db->buffer2 : db->buffer1, 
-              1, BUFFER_SIZE, db->fp);
+        size_t bytes_read = fread(db->current ? db->buffer2 : db->buffer1,
+                                  1, BUFFER_SIZE, db->fp);
+        if (bytes_read == 0) {
+            return EOF;
+        }
     }
-    return db->current ? 
-           db->buffer2[db->pos++] : 
-           db->buffer1[db->pos++];
+    return db->current ?
+           (unsigned char)db->buffer2[db->pos++] :
+           (unsigned char)db->buffer1[db->pos++];
 }
 ```
 
