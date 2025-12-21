@@ -869,6 +869,18 @@ void insert_keyword(const char* keyword, TokenType type) {
     keyword_table[h] = node;
 }
 
+void free_keyword_table(void) {
+    for (int i = 0; i < HASH_SIZE; i++) {
+        KeywordNode* node = keyword_table[i];
+        while (node) {
+            KeywordNode* next = node->next;
+            free(node->keyword);
+            free(node);
+            node = next;
+        }
+        keyword_table[i] = NULL;
+    }
+}
 TokenType lookup_keyword(const char* str) {
     unsigned int h = hash(str);
     KeywordNode* node = keyword_table[h];
