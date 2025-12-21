@@ -959,9 +959,18 @@ Token* lookup_cache(const char* lexeme) {
 }
 
 void cache_token(const char* lexeme, Token token) {
+    if (!lexeme) return;  // Validação de entrada
+    
     unsigned int h = hash(lexeme) % CACHE_SIZE;
-    strncpy(token_cache[h].lexeme, lexeme, MAX_TOKEN_LENGTH - 1);
-    token_cache[h].lexeme[MAX_TOKEN_LENGTH - 1] = '\0';
+    
+    // Garante terminação nula mesmo se lexeme for muito longo
+    size_t len = strlen(lexeme);
+    if (len >= MAX_TOKEN_LENGTH) {
+        len = MAX_TOKEN_LENGTH - 1;
+    }
+    memcpy(token_cache[h].lexeme, lexeme, len);
+    token_cache[h].lexeme[len] = '\0';
+    
     token_cache[h].token = token;
     token_cache[h].valid = 1;  // Marca a entrada como válida
 }
