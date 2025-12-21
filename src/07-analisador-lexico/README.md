@@ -675,7 +675,7 @@ EOF             EOF                  8:2
 
 ### Estratégias de Recuperação
 
-**Louden** (1997) sugere várias estratégias:
+**Segundo Louden (1997),** podem ser adotadas várias estratégias de recuperação de erros léxicos:
 
 #### 1. Modo Pânico (*Panic Mode*)
 ```c
