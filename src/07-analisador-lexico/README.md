@@ -1156,8 +1156,8 @@ EOF             EOF                  12:2
 
 ### Recursos Online
 
-10. **The Lex & Yacc Page**: http://dinosaur.compilertools.net/
-    - Documentação e tutoriais sobre Lex/Flex
+10. **Flex Manual (oficial)**: https://westes.github.io/flex/manual/
+    - Documentação e tutoriais atualizados sobre Flex (sucessor do Lex)
     
 11. **Flex Documentation**: https://github.com/westes/flex
     - Manual completo do Flex
