@@ -110,7 +110,7 @@ Cada tipo de token pode ser descrito por uma **expressão regular**:
 | Espaços em branco | `[ \t\n\r]+` | Espaços, tabs, quebras de linha |
 | Operador de atribuição | `=` | Símbolo de igual |
 | Operador de igualdade | `==` | Dois símbolos de igual |
-| Operador relacional | `<=\|>=\|<\|>` | Operadores de comparação |
+| Operador relacional | `<=|>=|<|>` | Operadores de comparação |
 
 ### Autômatos Finitos
 
