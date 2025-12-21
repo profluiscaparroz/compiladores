@@ -231,7 +231,7 @@ Do ponto de vista teórico, a análise léxica trabalha com **linguagens regular
 
 ### Teorema da Equivalência
 
-**Teorema (Kleene, 1956)**: As seguintes representações são equivalentes:
+**Teorema (Kleene, 1951)**: As seguintes representações são equivalentes:
 1. Linguagens regulares
 2. Autômatos finitos
 3. Expressões regulares
