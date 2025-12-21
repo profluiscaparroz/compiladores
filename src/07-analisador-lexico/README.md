@@ -373,17 +373,46 @@ Token get_next_token(FILE* fp, int* line, int* column) {
         token.lexeme[i++] = ch;
 
         while ((ch = fgetc(fp)) != EOF) {
-            token.lexeme[i++] = ch;
             (*column)++;
 
             if (ch == '\\') {
-                // Caractere escapado
+                // Caractere escapado: processa a sequência de escape
                 char esc = fgetc(fp);
-                if (esc == EOF) break;
-                token.lexeme[i++] = esc;
+                if (esc == EOF) {
+                    break;
+                }
                 (*column)++;
-            } else if (ch == '"') {
-                break;
+
+                switch (esc) {
+                    case 'n':
+                        token.lexeme[i++] = '\n';
+                        break;
+                    case 't':
+                        token.lexeme[i++] = '\t';
+                        break;
+                    case 'r':
+                        token.lexeme[i++] = '\r';
+                        break;
+                    case '0':
+                        token.lexeme[i++] = '\0';
+                        break;
+                    case '"':
+                        token.lexeme[i++] = '"';
+                        break;
+                    case '\\':
+                        token.lexeme[i++] = '\\';
+                        break;
+                    default:
+                        // Escape desconhecido: mantém a barra e o caractere original
+                        token.lexeme[i++] = '\\';
+                        token.lexeme[i++] = esc;
+                        break;
+                }
+            } else {
+                token.lexeme[i++] = ch;
+                if (ch == '"') {
+                    break;
+                }
             }
 
             if (i >= MAX_TOKEN_LENGTH - 2) {
