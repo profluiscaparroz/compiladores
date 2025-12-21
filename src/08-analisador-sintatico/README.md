@@ -22,7 +22,7 @@ A **análise sintática** (ou *parsing*) é a **segunda fase** de um compilador,
 
 ### Importância da Análise Sintática
 
-Segundo **Aho, Sethi e Ullman** (1986), no clássico "Compiladores: Princípios, Técnicas e Ferramentas":
+Segundo **Aho, Sethi e Ullman** (2006), no clássico "Compiladores: Princípios, Técnicas e Ferramentas":
 
 > "O analisador sintático obtém uma cadeia de tokens do analisador léxico e verifica se a cadeia pode ser gerada pela gramática para a linguagem fonte."
 
@@ -927,7 +927,7 @@ OP: +
 
 ### Estratégias de Recuperação
 
-**Segundo Aho et al. (1986)**, existem quatro estratégias principais:
+**Segundo Aho et al. (2006)**, existem quatro estratégias principais:
 
 #### 1. Modo Pânico (Panic Mode)
 Descarta tokens até encontrar um **sincronizador** (ex: `;`, `}`, `end`).
@@ -1153,7 +1153,6 @@ src/08-analisador-sintatico/
 ├── exemploCompleto.c     # Parser completo com AST
 ├── exemploSimplificado.c # Versão simplificada didática
 ├── entrada.txt           # Arquivo de teste
-├── Makefile              # Script de compilação
 └── README.md             # Este arquivo
 ```
 
@@ -1166,8 +1165,8 @@ gcc exemploSimples.c -o exemploSimples
 # Compilar o exemplo completo
 gcc exemploCompleto.c -o exemploCompleto
 
-# Ou usar o Makefile
-make
+# Compilar o exemplo simplificado
+gcc exemploSimplificado.c -o exemploSimplificado
 ```
 
 ### Execução
