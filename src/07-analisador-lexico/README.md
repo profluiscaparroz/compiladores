@@ -944,17 +944,26 @@ int next_state(int current_state, char ch) {
 typedef struct {
     char lexeme[MAX_TOKEN_LENGTH];
     Token token;
+    int valid;  // Flag para indicar se a entrada é válida
 } CacheEntry;
 
 #define CACHE_SIZE 256
-CacheEntry token_cache[CACHE_SIZE];
+CacheEntry token_cache[CACHE_SIZE] = {0};  // Inicializa todas as entradas como inválidas
 
 Token* lookup_cache(const char* lexeme) {
     unsigned int h = hash(lexeme) % CACHE_SIZE;
-    if (strcmp(token_cache[h].lexeme, lexeme) == 0) {
+    if (token_cache[h].valid && strcmp(token_cache[h].lexeme, lexeme) == 0) {
         return &token_cache[h].token;
     }
     return NULL;
+}
+
+void cache_token(const char* lexeme, Token token) {
+    unsigned int h = hash(lexeme) % CACHE_SIZE;
+    strncpy(token_cache[h].lexeme, lexeme, MAX_TOKEN_LENGTH - 1);
+    token_cache[h].lexeme[MAX_TOKEN_LENGTH - 1] = '\0';
+    token_cache[h].token = token;
+    token_cache[h].valid = 1;  // Marca a entrada como válida
 }
 ```
 
