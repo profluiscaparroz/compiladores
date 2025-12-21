@@ -951,6 +951,7 @@ typedef struct {
 CacheEntry token_cache[CACHE_SIZE] = {0};  // Inicializa todas as entradas como inválidas
 
 // Função hash específica para cache (retorna índice direto)
+// Implementa o algoritmo djb2 (hash * 33 + c), conhecido por boa distribuição
 unsigned int hash_for_cache(const char* str) {
     unsigned int h = 0;
     while (*str) {
@@ -973,8 +974,11 @@ void cache_token(const char* lexeme, Token token) {
     unsigned int h = hash_for_cache(lexeme);
     
     // Garante terminação nula mesmo se lexeme for muito longo
-    // Usa strnlen para evitar escanear strings muito longas
-    size_t len = strnlen(lexeme, MAX_TOKEN_LENGTH);
+    // Calcula comprimento com limite para portabilidade (alternativa a strnlen)
+    size_t len = 0;
+    while (len < MAX_TOKEN_LENGTH && lexeme[len] != '\0') {
+        len++;
+    }
     if (len >= MAX_TOKEN_LENGTH) {
         len = MAX_TOKEN_LENGTH - 1;
     }
