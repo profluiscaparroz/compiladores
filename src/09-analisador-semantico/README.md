@@ -1001,6 +1001,30 @@ void exit_scope() {
     }
 }
 
+void cleanup_all_scopes() {
+    // Liberar todos os escopos incluindo o global
+    while (current_scope) {
+        Scope* old_scope = current_scope;
+        current_scope = current_scope->parent;
+        
+        // Liberar símbolos do escopo
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            HashEntry* entry = old_scope->symbols[i];
+            while (entry) {
+                HashEntry* next = entry->next;
+                free(entry->symbol->name);
+                if (entry->symbol->param_types) {
+                    free(entry->symbol->param_types);
+                }
+                free(entry->symbol);
+                free(entry);
+                entry = next;
+            }
+        }
+        free(old_scope);
+    }
+}
+
 // ========== TABELA DE SÍMBOLOS ==========
 
 void insert_symbol(const char* name, SymbolType type, int line) {
@@ -1083,6 +1107,17 @@ void print_symbol_table() {
 }
 
 // ========== VERIFICAÇÃO SEMÂNTICA ==========
+
+// Nota: ASTNode deve ser definido conforme módulo 08 (analisador sintático).
+// Exemplo de definição básica:
+// typedef struct ASTNode {
+//     NodeType type;
+//     char* value;
+//     struct ASTNode* left;
+//     struct ASTNode* right;
+//     SymbolType expr_type;  // Tipo anotado após análise semântica
+//     int line;
+// } ASTNode;
 
 SymbolType check_expression(ASTNode* node) {
     // Implementação como mostrado anteriormente
