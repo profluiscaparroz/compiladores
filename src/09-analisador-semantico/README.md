@@ -979,24 +979,28 @@ void enter_scope() {
     current_scope = new_scope;
 }
 
+// Função auxiliar para liberar memória de um escopo
+void free_scope_symbols(Scope* scope) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        HashEntry* entry = scope->symbols[i];
+        while (entry) {
+            HashEntry* next = entry->next;
+            free(entry->symbol->name);
+            if (entry->symbol->param_types) {
+                free(entry->symbol->param_types);
+            }
+            free(entry->symbol);
+            free(entry);
+            entry = next;
+        }
+    }
+}
+
 void exit_scope() {
     if (current_scope && current_scope->parent) {
         Scope* old_scope = current_scope;
         current_scope = current_scope->parent;
-        // Liberar símbolos do escopo antigo
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            HashEntry* entry = old_scope->symbols[i];
-            while (entry) {
-                HashEntry* next = entry->next;
-                free(entry->symbol->name);
-                if (entry->symbol->param_types) {
-                    free(entry->symbol->param_types);
-                }
-                free(entry->symbol);
-                free(entry);
-                entry = next;
-            }
-        }
+        free_scope_symbols(old_scope);
         free(old_scope);
     }
 }
@@ -1006,21 +1010,7 @@ void cleanup_all_scopes() {
     while (current_scope) {
         Scope* old_scope = current_scope;
         current_scope = current_scope->parent;
-        
-        // Liberar símbolos do escopo
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            HashEntry* entry = old_scope->symbols[i];
-            while (entry) {
-                HashEntry* next = entry->next;
-                free(entry->symbol->name);
-                if (entry->symbol->param_types) {
-                    free(entry->symbol->param_types);
-                }
-                free(entry->symbol);
-                free(entry);
-                entry = next;
-            }
-        }
+        free_scope_symbols(old_scope);
         free(old_scope);
     }
 }
