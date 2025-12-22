@@ -1013,6 +1013,7 @@ void cleanup_all_scopes() {
         free_scope_symbols(old_scope);
         free(old_scope);
     }
+    // current_scope já está NULL após o loop
 }
 
 // ========== TABELA DE SÍMBOLOS ==========
@@ -1100,6 +1101,11 @@ void print_symbol_table() {
 
 // Nota: ASTNode deve ser definido conforme módulo 08 (analisador sintático).
 // Exemplo de definição básica:
+// typedef enum {
+//     NODE_NUMBER, NODE_IDENTIFIER, NODE_BINARY_OP, 
+//     NODE_IF_STMT, NODE_WHILE_STMT, NODE_ASSIGN, /* etc */
+// } NodeType;
+//
 // typedef struct ASTNode {
 //     NodeType type;
 //     char* value;
