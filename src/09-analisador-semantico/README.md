@@ -277,7 +277,7 @@ HashEntry* hash_table[TABLE_SIZE];
 unsigned int hash(const char* name) {
     unsigned int h = 0;
     while (*name) {
-        h = (h << 5) + h + *name++;
+        h = h * 33 + *name++;
     }
     return h % TABLE_SIZE;
 }
