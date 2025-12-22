@@ -869,6 +869,7 @@ void check_return_statement(ASTNode* node, SymbolType expected_return) {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define TABLE_SIZE 211
 #define MAX_ERRORS 100
