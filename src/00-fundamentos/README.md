@@ -359,7 +359,7 @@ Até agora, trabalhamos com variáveis em **memória estática** (definidas em t
 #include <stdlib.h>
 
 // Alocar memória para 10 inteiros
-int *array = (int*) malloc(10 * sizeof(int));
+int *array = malloc(10 * sizeof(int));
 
 if (array == NULL) {
     printf("Erro: memória insuficiente!\n");
