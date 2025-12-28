@@ -425,7 +425,7 @@ L3: 8-32 MB compartilhado
 
 ### 🏛️ CISC (Complex Instruction Set Computer)
 
-**Filosofia**: "Façamais com menos instruções"
+**Filosofia**: "Faça mais com menos instruções"
 
 **História**: Surgiu nos anos 1970-80 quando:
 - Memória era cara (programas pequenos eram importantes)
@@ -515,7 +515,7 @@ Micro-ops → Executadas em core RISC-like
 
 ### ⚡ Performance Bruta
 
-**Benchmarks Típicos** (2023):
+**Benchmarks Típicos** (dados de 2023 — referência histórica):
 
 **x86-64** (Intel Core i9-13900K, AMD Ryzen 9 7950X):
 - Single-thread: ~2000-2200 (Geekbench)
@@ -631,7 +631,7 @@ ARM obtém mais performance por área de silício.
 
 #### Supercomputação
 
-**Top 10 Supercomputadores** (2023):
+**Top 10 Supercomputadores** (dados de 2023, ranking TOP500 — informação histórica):
 - Maioria ARM (Fugaku #2: ARM A64FX)
 - Alguns x86 (AMD EPYC)
 - Razão: Eficiência energética é crítica (cooling custa milhões)
@@ -863,13 +863,13 @@ void process_data(float *data, int n) {
 **Expansão Massiva**:
 
 **Data Centers**:
-- AWS Graviton4 (2024)
+- AWS Graviton4 (lançado em 2024)
 - Microsoft Azure ARM VMs
 - Google Cloud Tau T2A
 
 **Desktops**:
 - **Apple Silicon**: M1/M2/M3 provam que ARM compete em desktops
-- **Qualcomm Snapdragon X Elite**: ARM para Windows (2024)
+- **Qualcomm Snapdragon X Elite**: ARM para Windows (lançado em 2024)
 - **Microsoft**: Surface ARM, Windows 11 ARM
 
 **Servidores**:
@@ -1197,7 +1197,7 @@ fibonacci:
 - Aplicações HPC específicas
 - Onde performance absoluta bruta é crítica
 
-**Tendência**: 40-50% dos data centers terão ARM até 2025-2026.
+**Tendência**: 40-50% dos data centers terão ARM até 2026-2027.
 
 ### 🤔 Pergunta 3: Por que smartphones não usam x86?
 
