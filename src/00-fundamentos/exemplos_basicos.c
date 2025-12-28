@@ -345,7 +345,8 @@ int main() {
     // 8. Testando estruturas
     printf("8. ESTRUTURAS\n");
     struct Estudante aluno;
-    strcpy(aluno.nome, "João Silva");
+    strncpy(aluno.nome, "João Silva", sizeof(aluno.nome) - 1);
+    aluno.nome[sizeof(aluno.nome) - 1] = '\0';
     aluno.matricula = 12345;
     aluno.notas[0] = 8.5;
     aluno.notas[1] = 7.0;
