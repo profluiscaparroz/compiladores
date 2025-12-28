@@ -140,6 +140,9 @@ int busca_binaria(int arr[], int tamanho, int alvo) {
     int direita = tamanho - 1;
     
     while (esquerda <= direita) {
+        // Usamos esta forma em vez de (esquerda + direita) / 2 para evitar
+        // possível overflow quando os índices são grandes, embora a lógica
+        // seja equivalente ao exemplo do README (esq + dir) / 2.
         int meio = esquerda + (direita - esquerda) / 2;
         
         if (arr[meio] == alvo) {
