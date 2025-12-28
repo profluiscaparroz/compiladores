@@ -396,9 +396,15 @@ free(array);
 int *array = (int*) malloc(5 * sizeof(int));
 
 // Depois, precisamos de mais espaço
-array = (int*) realloc(array, 10 * sizeof(int));
+int *temp = realloc(array, 10 * sizeof(int));
+if (temp != NULL) {
+    array = temp;  // realloc bem-sucedido, atualiza o ponteiro
+} else {
+    // tratar erro de alocação mantendo 'array' válido
+    // por exemplo: free(array); lidar_com_erro();
+}
 
-// Agora temos espaço para 10 inteiros
+// Agora temos espaço para 10 inteiros (se realloc tiver sucesso)
 free(array);
 ```
 
