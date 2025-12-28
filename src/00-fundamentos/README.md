@@ -473,7 +473,12 @@ char destino[20];
 int tamanho = strlen(origem);  // 3
 
 // strcpy - copiar string
-strcpy(destino, origem);  // destino agora é "Olá"
+// Atenção: strcpy NÃO verifica o tamanho do destino e pode causar buffer overflow
+// em códigos reais. Prefira funções que limitam o número de caracteres copiados,
+// como strncpy ou snprintf.
+strncpy(destino, origem, sizeof(destino) - 1);
+destino[sizeof(destino) - 1] = '\0';  // garante terminação em \0
+// destino agora é "Olá"
 
 // strcat - concatenar strings
 strcat(destino, " Mundo");  // destino agora é "Olá Mundo"
