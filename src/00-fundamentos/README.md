@@ -566,7 +566,7 @@ A **notação Big-O** expressa como o tempo de execução ou uso de memória de 
 | O(1) | Constante | Acessar array[i] | Tempo fixo, não depende do tamanho da entrada |
 | O(log n) | Logarítmica | Busca binária | Muito eficiente, divide o problema pela metade |
 | O(n) | Linear | Busca sequencial | Proporcional ao tamanho da entrada |
-| O(n log n) | Linearítmica | Merge Sort, Quick Sort | Algoritmos de ordenação eficientes |
+| O(n log n) | Linearithmic (linearítmica) | Merge Sort, Quick Sort | Algoritmos de ordenação eficientes |
 | O(n²) | Quadrática | Bubble Sort, Selection Sort | Um loop dentro de outro |
 | O(2ⁿ) | Exponencial | Algumas recursões | Cresce muito rapidamente |
 
