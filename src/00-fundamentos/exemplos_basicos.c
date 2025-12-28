@@ -211,7 +211,7 @@ void trocar(int *a, int *b) {
 
 // Aloca e inicializa um array dinamicamente
 int* criar_array(int tamanho, int valor_inicial) {
-    int *arr = (int*) malloc(tamanho * sizeof(int));
+    int *arr = malloc(tamanho * sizeof(int));
     
     if (arr == NULL) {
         return NULL; // Erro de alocação
