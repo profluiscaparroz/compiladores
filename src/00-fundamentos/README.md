@@ -380,7 +380,7 @@ array = NULL;  // Boa prática: anular o ponteiro
 
 ```c
 // calloc aloca e inicializa com zeros
-int *array = (int*) calloc(10, sizeof(int));
+int *array = calloc(10, sizeof(int));
 
 // Todos os elementos começam com 0
 for (int i = 0; i < 10; i++) {
@@ -490,10 +490,14 @@ destino[sizeof(destino) - 1] = '\0';  // garante terminação em \0
 strcat(destino, " Mundo");  // destino agora é "Olá Mundo"
 
 // strcmp - comparar strings
-if (strcmp(str1, str2) == 0) {
+// Retorna: 0 se iguais, negativo se str1 < str2, positivo se str1 > str2
+int resultado = strcmp(str1, str2);
+if (resultado == 0) {
     printf("Strings iguais\n");
+} else if (resultado < 0) {
+    printf("str1 vem antes de str2\n");
 } else {
-    printf("Strings diferentes\n");
+    printf("str1 vem depois de str2\n");
 }
 
 // strchr - buscar caractere
@@ -602,7 +606,7 @@ int busca_binaria(int arr[], int n, int alvo) {
     int esq = 0, dir = n - 1;
     
     while (esq <= dir) {
-        int meio = (esq + dir) / 2;
+        int meio = esq + (dir - esq) / 2;  // Evita overflow
         
         if (arr[meio] == alvo) {
             return meio;  // Encontrado

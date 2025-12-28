@@ -58,18 +58,20 @@ void imprimir_array(int arr[], int tamanho) {
 }
 
 // Encontra o maior elemento em um array
-int encontrar_maximo(int arr[], int tamanho) {
-    if (tamanho <= 0) {
-        return -1; // Erro
+// Retorna 1 em caso de sucesso, 0 em caso de erro
+// O valor máximo é armazenado em *resultado
+int encontrar_maximo(int arr[], int tamanho, int *resultado) {
+    if (tamanho <= 0 || arr == NULL || resultado == NULL) {
+        return 0; // Erro
     }
     
-    int max = arr[0];
+    *resultado = arr[0];
     for (int i = 1; i < tamanho; i++) {
-        if (arr[i] > max) {
-            max = arr[i];
+        if (arr[i] > *resultado) {
+            *resultado = arr[i];
         }
     }
-    return max;
+    return 1; // Sucesso
 }
 
 // Inverte um array in-place
@@ -280,7 +282,12 @@ int main() {
     printf("   Array original: ");
     imprimir_array(numeros, tamanho);
     
-    printf("   Maior elemento: %d\n", encontrar_maximo(numeros, tamanho));
+    int max;
+    if (encontrar_maximo(numeros, tamanho, &max)) {
+        printf("   Maior elemento: %d\n", max);
+    } else {
+        printf("   Erro ao encontrar o maior elemento\n");
+    }
     
     inverter_array(numeros, tamanho);
     printf("   Array invertido: ");
