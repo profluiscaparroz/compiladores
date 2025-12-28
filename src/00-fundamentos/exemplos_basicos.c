@@ -235,7 +235,7 @@ struct Ponto {
 float distancia(struct Ponto p1, struct Ponto p2) {
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
-    return sqrt(dx * dx + dy * dy); // Precisaria incluir <math.h>
+    return sqrt(dx * dx + dy * dy);
 }
 
 // Estrutura representando um estudante
