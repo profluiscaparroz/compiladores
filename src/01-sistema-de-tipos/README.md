@@ -184,7 +184,7 @@ end.
 - **Tipagem forte**: Conversões explícitas obrigatórias
 - **Tipos nomeados**: `type Temperature = Real` cria tipo distinto
 - **Verificação em tempo de compilação**: Máxima detecção de erros antes da execução
-- **Segurança**: Prevenir operações nonsensicas
+- **Segurança**: Prevenir operações sem sentido
 
 #### C e Tipagem Pragmática
 
@@ -301,7 +301,7 @@ Este princípio formal define quando a relação de subtipagem é sã:
 List list = new ArrayList();
 list.add("texto");
 list.add(Integer.valueOf(42));
-String s = (String) list.get(0);  // Cast necessário, propenso a erros
+String s = (String) list.get(0);  // Cast era necessário, propenso a erros
 ```
 
 **Java 5** (2004) introduziu **generics**:
@@ -715,7 +715,7 @@ let z = 100;               // z inferido como number
 ```
 
 **Vantagens**:
-- **Adoção incrementar**: Adicionar tipos gradualmente a código existente
+- **Adoção incremental**: Adicionar tipos gradualmente a código existente
 - **Flexibilidade quando necessária**: Bypass do sistema de tipos com `any`
 - **Migração**: Facilita transição de linguagens dinâmicas para estáticas
 
@@ -738,7 +738,7 @@ print(str(x) + s)  # OK: "5texto"
 
 **Características**:
 - **Conversões explícitas**: Programador deve converter tipos manualmente
-- **Segurança**: Previne operações nonsensicas
+- **Segurança**: Previne operações sem sentido
 - **Clareza**: Intenção do programador é explícita
 
 #### Tipagem Fraca
