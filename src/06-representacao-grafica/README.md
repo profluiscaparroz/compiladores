@@ -2684,7 +2684,8 @@ void processar_imagem_otimizado(int *pixels, int width, int height) {
                 }
             }
             // Divisão por 9 usando multiplicação por recíproco (mais rápido que divisão)
-            // soma / 9 ≈ soma * 0x1C71C71D >> 32 (método de recíproco de Newton)
+            // Método: x/9 = (x * M) >> 32, onde M = ⌊2^32/9⌋ = 0x1C71C71D
+            // Recíproco de Newton: M ≈ 477,218,589 (2^32/9 com arredondamento)
             int32x4_t reciproco = vdupq_n_s32(0x1C71C71D);
             soma = vqdmulhq_s32(soma, reciproco);
             vst1q_s32(&pixels[y*width + x], soma);
