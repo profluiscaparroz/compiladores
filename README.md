@@ -450,6 +450,10 @@ Este repositório oferece uma jornada através deste fascinante campo, da teoria
 
 ## Estrutura (pasta `src/`)
 
+- 01-sistema-de-tipos
+  - Estudo abrangente sobre sistemas de tipos em compiladores.
+  - História, teoria, classificação, padrões IEEE, inferência, polimorfismo.
+  - Implementação prática e o que todo arquiteto de compiladores deve saber.
 - 02-linguagens-formais
   - Conceitos de linguagens e gramáticas.
   - Exercícios de classificação e reconhecimento simples.
@@ -505,11 +509,12 @@ A saída listará tokens (tipo, lexema, posição linha:coluna).
 
 ## Roteiro sugerido de estudo
 
-1) 02 → 03 → 04: dos modelos teóricos ao reconhecimento efetivo.
-2) 07: implemente e experimente o léxico (base para as próximas fases).
-3) 08: adicione um analisador sintático (ex.: expressões e blocos).
-4) 09: inclua tabela de símbolos e verificação semântica.
-5) (Opcional) Geração de código ou interpretação.
+1) 01: estude o sistema de tipos para entender os fundamentos teóricos e práticos da tipagem em compiladores.
+2) 02 → 03 → 04: dos modelos teóricos ao reconhecimento efetivo.
+3) 07: implemente e experimente o léxico (base para as próximas fases).
+4) 08: adicione um analisador sintático (ex.: expressões e blocos).
+5) 09: inclua tabela de símbolos e verificação semântica (aplique os conceitos de tipos estudados em 01).
+6) (Opcional) Geração de código ou interpretação.
 
 ## Exercícios gerais
 
