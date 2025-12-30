@@ -180,17 +180,19 @@ a   d
 
 ### 🔢 Complexidade Computacional de Análises
 
+**Notação:** V = número de vértices (blocos básicos), E = número de arestas no CFG, N = número de instruções
+
 | Análise | Complexidade | Algoritmo Base |
 |---------|--------------|----------------|
 | Construção de CFG | O(N) | Linear scan |
-| Análise de dominância | O(E × α(E,V)) ≈ O(E) | Lengauer-Tarjan |
+| Análise de dominância | O(E × α(E,V)) * | Lengauer-Tarjan |
 | SSA construction | O(N × E) | Algoritmo de Cytron |
 | Análise de alcance | O(N × E) | Iterative dataflow |
 | Análise de liveness | O(N × E) | Backward dataflow |
 | Points-to analysis | O(N³) | Andersen's algorithm |
 | Detecção de ciclos | O(V + E) | DFS |
 
-**Nota:** N = número de instruções, E = número de arestas no CFG
+\* **Nota:** α(E,V) é a função inversa de Ackermann, que cresce extremamente devagar. Para grafos práticos (até 10^80 nós), α(E,V) ≤ 4, tornando a complexidade quase linear na prática.
 
 ### 🎯 Teoremas Fundamentais
 
@@ -2547,13 +2549,21 @@ void processa() {
 
 3. **Overhead vs. Speedup**: Nem todo paralelismo vale a pena:
    ```
-   Speedup teórico = 1 / (S + (1-S)/N)
-   S = fração sequencial (0 ≤ S ≤ 1)
+   Lei de Amdahl (Speedup teórico máximo):
+   Speedup = 1 / (S + (1-S)/N)
+   
+   Onde:
+   S = fração sequencial do programa (0 ≤ S ≤ 1)
    1-S = fração paralelizável
    N = número de processadores
    
-   Lei de Amdahl: Speedup máximo = 1/S
-   Exemplo: Se S=0.1 (10% sequencial), Speedup_max = 10x
+   Speedup máximo (N→∞): 1/S
+   
+   Exemplo: Se S=0.1 (10% sequencial):
+   - Com N=4: Speedup = 1/(0.1 + 0.9/4) ≈ 3.08x
+   - Com N=∞: Speedup_max = 1/0.1 = 10x
+   
+   Conclusão: Mesmo com infinitos processadores, speedup limitado a 10x
    ```
 
 4. **Falsos Compartilhamentos**: Mesmo sem dependência lógica, cache line sharing degrada performance
@@ -2683,9 +2693,9 @@ void processar_imagem_otimizado(int *pixels, int width, int height) {
                     soma = vaddq_s32(soma, valores);
                 }
             }
-            // Divisão por 9 usando multiplicação por recíproco (mais rápido que divisão)
-            // Método: x/9 = (x * M) >> 32, onde M = ⌊2^32/9⌋ = 0x1C71C71D
-            // Recíproco de Newton: M ≈ 477,218,589 (2^32/9 com arredondamento)
+            // Divisão por 9 usando multiplicação por inverso (mais rápido que divisão)
+            // Método: x/9 = (x * M) >> 32, onde M = ⌊2^32/9 + 0.5⌋ = 0x1C71C71D
+            // Inverso multiplicativo: M = 477,218,589 (arredondamento de 2^32/9 ≈ 477,218,588.44)
             int32x4_t reciproco = vdupq_n_s32(0x1C71C71D);
             soma = vqdmulhq_s32(soma, reciproco);
             vst1q_s32(&pixels[y*width + x], soma);
