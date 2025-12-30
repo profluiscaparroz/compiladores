@@ -183,7 +183,7 @@ a   d
 | Análise | Complexidade | Algoritmo Base |
 |---------|--------------|----------------|
 | Construção de CFG | O(N) | Linear scan |
-| Análise de dominância | O(N × E) | Lengauer-Tarjan |
+| Análise de dominância | O(E × α(E,V)) ≈ O(E) | Lengauer-Tarjan |
 | SSA construction | O(N × E) | Algoritmo de Cytron |
 | Análise de alcance | O(N × E) | Iterative dataflow |
 | Análise de liveness | O(N × E) | Backward dataflow |
@@ -1864,8 +1864,9 @@ int c = a + b; // I3 - depende de I1 e I2
 int d = b * 2; // I4 - depende de I2
 int e = c + d; // I5 - depende de I3 e I4
 
-// CFG: 1 bloco básico, O(5)
-// DDG: 7 arestas de dependência, O(25) no pior caso
+// CFG: 1 bloco básico, tempo de construção O(N) = O(5)
+// DDG: 5 arestas de dependência reais (I1→I3, I2→I3, I2→I4, I3→I5, I4→I5)
+// Pior caso DDG: O(N²) = O(25) se cada instrução dependesse de todas anteriores
 ```
 
 ---
@@ -2546,12 +2547,13 @@ void processa() {
 
 3. **Overhead vs. Speedup**: Nem todo paralelismo vale a pena:
    ```
-   Speedup teórico = 1 / (S + P/N)
-   S = fração sequencial
-   P = fração paralelizável
+   Speedup teórico = 1 / (S + (1-S)/N)
+   S = fração sequencial (0 ≤ S ≤ 1)
+   1-S = fração paralelizável
    N = número de processadores
    
-   Lei de Amdahl limita ganhos
+   Lei de Amdahl: Speedup máximo = 1/S
+   Exemplo: Se S=0.1 (10% sequencial), Speedup_max = 10x
    ```
 
 4. **Falsos Compartilhamentos**: Mesmo sem dependência lógica, cache line sharing degrada performance
@@ -2681,8 +2683,10 @@ void processar_imagem_otimizado(int *pixels, int width, int height) {
                     soma = vaddq_s32(soma, valores);
                 }
             }
-            // Divisão substituída por shift (9 ≈ 2^3, aproximação)
-            soma = vshrq_n_s32(soma, 3);
+            // Divisão por 9 usando multiplicação por recíproco (mais rápido que divisão)
+            // soma / 9 ≈ soma * 0x1C71C71D >> 32 (método de recíproco de Newton)
+            int32x4_t reciproco = vdupq_n_s32(0x1C71C71D);
+            soma = vqdmulhq_s32(soma, reciproco);
             vst1q_s32(&pixels[y*width + x], soma);
         }
     }
@@ -3249,7 +3253,7 @@ Instruções: 12 → 6 (50% redução)
 5. **"SSA-based Compiler Design"** - Rastello & Bouchez Tichadou
    - Livro dedicado completamente a SSA
    - Teoria e prática de construção e desconstrução SSA
-   - Disponível gratuitamente: http://ssabook.gforge.inria.fr/latest/
+   - Disponível gratuitamente: https://link.springer.com/book/10.1007/978-3-030-80515-9
    - Springer, 2022
 
 6. **"Optimizing Compilers for Modern Architectures"** - Allen & Kennedy
