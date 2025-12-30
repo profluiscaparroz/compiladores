@@ -89,10 +89,10 @@ z = x;      // Uso U2 - D1 alcança U2
 ```
 
 #### Dominância
-Um nó `d` **domina** um nó `n` se todo caminho da entrada até `n` passa por `d`.
+Um vértice `d` **domina** um vértice `n` se todo caminho da entrada até `n` passa por `d`.
 
 **Propriedades:**
-1. Todo nó domina a si mesmo
+1. Todo vértice domina a si mesmo
 2. Relação de dominância é transitiva
 3. Relação de dominância forma uma árvore (dominator tree)
 
@@ -116,14 +116,14 @@ Dominância:
 ```
 
 #### Pós-Dominância
-Um nó `p` **pós-domina** um nó `n` se todo caminho de `n` até a saída passa por `p`.
+Um vértice `p` **pós-domina** um vértice `n` se todo caminho de `n` até a saída passa por `p`.
 
 **Aplicação:** Identificar regiões de controle, colocação de código de instrumentação
 
 #### Fronteira de Dominância
-A **fronteira de dominância** DF(n) de um nó n é o conjunto de nós onde:
-- n domina um predecessor do nó
-- n não domina estritamente o nó
+A **fronteira de dominância** DF(n) de um vértice n é o conjunto de vértices onde:
+- n domina um predecessor do vértice
+- n não domina estritamente o vértice
 
 **Uso crítico:** Colocação de funções φ em SSA
 
@@ -168,14 +168,15 @@ a = [+]         d = [+]
     / \             / \
    b   c           b   c
 
-// Com DAG (compartilhamento):
-   [+]
-   / \
-  b   c
- / \
+// Com DAG (compartilhamento da sub-expressão comum):
 a   d
+ \ /
+ [+]
+ / \
+b   c
 
 // Economiza espaço e permite identificar sub-expressões comuns
+// Ambos 'a' e 'd' apontam para o mesmo nó '+' que representa b+c
 ```
 
 ### 🔢 Complexidade Computacional de Análises
@@ -1150,18 +1151,25 @@ CFG:
 // Código seguro (tempo constante)
 bool verificar_senha_seguro(const char *senha_entrada, const char *senha_real) {
     int diferenca = 0;
-    int len = strlen(senha_real);
+    int len_real = strlen(senha_real);
+    int len_entrada = strlen(senha_entrada);
+
+    // Compara os comprimentos em "tempo constante"
+    diferenca |= (len_entrada ^ len_real);
     
-    // Sempre percorre toda a string
-    for (int i = 0; i < len; i++) {
-        diferenca |= (senha_entrada[i] ^ senha_real[i]);
+    // Sempre percorre toda a string real
+    for (int i = 0; i < len_real; i++) {
+        // Evita acesso fora dos limites se senha_entrada for menor
+        unsigned char a = (i < len_entrada) ? (unsigned char)senha_entrada[i] : 0;
+        unsigned char b = (unsigned char)senha_real[i];
+        diferenca |= (a ^ b);
     }
     
     return (diferenca == 0);
 }
 
 // CFG garantido: Sempre executa todas as iterações
-// Tempo constante independente de onde está o erro
+// Tempo constante independente de onde está o erro (inclusive no tamanho)
 ```
 
 ---
@@ -2066,7 +2074,7 @@ for (int i = 0; i < n; i++) {
     }
 }
 
-// Após hoisting
+// Após hoisting (assumindo n > 0)
 int limite = sqrt(n);      // Movido para fora
 for (int i = 0; i < n; i++) {
     if (array[i] < limite) {
@@ -2074,6 +2082,8 @@ for (int i = 0; i < n; i++) {
     }
 }
 // Ganho: sqrt() calculado 1 vez ao invés de n vezes
+// NOTA: Esta otimização altera semântica se n <= 0 (loop não executa)
+// mas sqrt() ainda seria chamado. Compilador deve verificar isso.
 ```
 
 **Quando Hoisting é INVÁLIDO:**
@@ -2264,7 +2274,7 @@ Vantagens:
 + Permite paralelização automática
 
 Desvantagens:
-- Complexidade de construção O(N³)
+- Complexidade de construção tipicamente O(N²) para grafos densos
 - Consome muito espaço
 - Caro computacionalmente
 ```
@@ -2554,8 +2564,11 @@ void processa() {
    
    Onde:
    S = fração sequencial do programa (0 ≤ S ≤ 1)
+       (porção que NÃO pode ser paralelizada)
    1-S = fração paralelizável
    N = número de processadores
+   
+   Nota: Assume paralelização perfeita da porção paralelizável
    
    Speedup máximo (N→∞): 1/S
    
@@ -2693,11 +2706,11 @@ void processar_imagem_otimizado(int *pixels, int width, int height) {
                     soma = vaddq_s32(soma, valores);
                 }
             }
-            // Divisão por 9 usando multiplicação por inverso (mais rápido que divisão)
-            // Método: x/9 = (x * M) >> 32, onde M = ⌊2^32/9 + 0.5⌋ = 0x1C71C71D
-            // Inverso multiplicativo: M = 477,218,589 (arredondamento de 2^32/9 ≈ 477,218,588.44)
-            int32x4_t reciproco = vdupq_n_s32(0x1C71C71D);
-            soma = vqdmulhq_s32(soma, reciproco);
+            // Divisão aproximada por 9 usando multiplicação por inverso em ponto fixo (mais rápido que divisão)
+            // Método (formato 1.31): x/9 ≈ (x * M) / 2^31, onde M = ⌊2^31/9 + 0.5⌋ = 0x0E38E38E
+            // Inverso multiplicativo em 1.31: M = 238,609,294 (arredondamento de 2^31/9 ≈ 238,609,294.22)
+            int32x4_t reciproco = vdupq_n_s32(0x0E38E38E);
+            soma = vqrdmulhq_s32(soma, reciproco);
             vst1q_s32(&pixels[y*width + x], soma);
         }
     }
@@ -2759,34 +2772,44 @@ PDG mostrando race condition:
 **Solução Baseada em Análise:**
 
 ```c
-// Versão corrigida com double buffering
+#include <stdatomic.h>
+
+// Versão corrigida com double buffering usando operações atômicas
 int ecg_buffer_a[1000];
 int ecg_buffer_b[1000];
-volatile int *buffer_escrita = ecg_buffer_a;
-volatile int *buffer_leitura = ecg_buffer_b;
-volatile int buffer_index = 0;
-volatile int buffer_pronto = 0;
+_Atomic(int *) buffer_escrita = ecg_buffer_a;
+_Atomic(int *) buffer_leitura = ecg_buffer_b;
+_Atomic int buffer_index = 0;
+_Atomic int buffer_pronto = 0;
 
 void interrupcao_adc() {
-    buffer_escrita[buffer_index++] = ler_adc();
-    if (buffer_index >= 1000) {
-        buffer_index = 0;
+    int idx = atomic_fetch_add_explicit(&buffer_index, 1, memory_order_relaxed);
+    atomic_load_explicit(&buffer_escrita, memory_order_relaxed)[idx] = ler_adc();
+
+    if (idx + 1 >= 1000) {
+        atomic_store_explicit(&buffer_index, 0, memory_order_relaxed);
+
         // Troca atômica de buffers
-        volatile int *temp = buffer_escrita;
-        buffer_escrita = buffer_leitura;
-        buffer_leitura = temp;
-        buffer_pronto = 1;
+        int *escrita_atual = atomic_load_explicit(&buffer_escrita, memory_order_relaxed);
+        int *leitura_antiga = atomic_exchange_explicit(&buffer_leitura,
+                                                       escrita_atual,
+                                                       memory_order_acq_rel);
+        atomic_store_explicit(&buffer_escrita, leitura_antiga, memory_order_release);
+
+        // Sinaliza que o buffer de leitura está pronto para processamento
+        atomic_store_explicit(&buffer_pronto, 1, memory_order_release);
     }
 }
 
 void processar_ecg() {
-    if (buffer_pronto) {
+    if (atomic_load_explicit(&buffer_pronto, memory_order_acquire)) {
         int media = 0;
+        int *buffer = atomic_load_explicit(&buffer_leitura, memory_order_acquire);
         for (int i = 0; i < 1000; i++) {
-            media += buffer_leitura[i];  // Sem race condition
+            media += buffer[i];  // Sem race condition
         }
         media /= 1000;
-        buffer_pronto = 0;
+        atomic_store_explicit(&buffer_pronto, 0, memory_order_release);
     }
 }
 ```
@@ -3029,6 +3052,7 @@ PostgreSQL converte plano de execução em código LLVM IR:
 typedef struct {
     int customer_id;
     double total;
+    int date;  // Representação simplificada de data como inteiro
 } Tupla;
 
 void executar_query_jit(Tupla *customers, Tupla *orders, 
@@ -3165,9 +3189,9 @@ uniform sampler2D normalMap;
 // metallicMap removido (dead code elimination)
 
 void main() {
-    // Prefetch todas as texturas em paralelo
-    vec4 albedoSample = textureAsync(albedoMap, fragTexCoord);
-    vec4 normalSample = textureAsync(normalMap, fragTexCoord);
+    // Carrega todas as texturas logo no início (o hardware gerencia latência)
+    vec4 albedoSample = texture(albedoMap, fragTexCoord);
+    vec4 normalSample = texture(normalMap, fragTexCoord);
     
     // Cálculo de lightDir movido para cima (hoisting)
     const vec3 lightDir = vec3(0.57735, 0.57735, 0.57735); // normalized
