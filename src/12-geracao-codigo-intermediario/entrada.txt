@@ -1,0 +1,13 @@
+# Arquivo de entrada de exemplo
+# Mostra código fonte que seria traduzido para TAC
+
+resultado = (a + b) * c;
+x = a + b * c - d;
+
+if (x > 0) {
+    y = x * 2;
+}
+
+while (i < 10) {
+    i = i + 1;
+}
