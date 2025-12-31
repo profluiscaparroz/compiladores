@@ -1,6 +1,11 @@
 /*
  * Gerador de Código Intermediário Simplificado
+ * 
  * Versão simplificada que evita problemas de memória
+ * ao usar alocação estática para strings.
+ * 
+ * Compilação: gcc gerador_codigo_simples.c -o gerador_codigo_simples -std=c99
+ * Uso: ./gerador_codigo_simples
  */
 
 #include <stdio.h>

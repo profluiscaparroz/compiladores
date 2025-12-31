@@ -1184,7 +1184,6 @@ src/11-traducao-dirigida-por-sintaxe/
 ├── calculadora.c          # Calculadora com avaliação
 ├── gerador_codigo.c       # Gerador de código intermediário
 ├── conversor_notacao.c    # Infixa para pós-fixa
-├── verificador_tipos.c    # Verificação de tipos simples
 ├── entrada.txt            # Exemplos de entrada
 └── README.md              # Este arquivo
 ```
@@ -1204,6 +1203,7 @@ gcc conversor_notacao.c -o conversor_notacao
 # Compilar todos com warnings
 gcc calculadora.c -o calculadora -Wall -Wextra -std=c99
 gcc gerador_codigo.c -o gerador_codigo -Wall -Wextra -std=c99
+gcc conversor_notacao.c -o conversor_notacao -Wall -Wextra -std=c99
 ```
 
 ### Execução
