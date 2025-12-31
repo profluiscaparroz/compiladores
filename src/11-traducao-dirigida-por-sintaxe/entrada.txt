@@ -1,0 +1,22 @@
+# Arquivo de Entrada para Testes
+# Exemplos de expressões para testar os programas
+
+# Para calculadora.c:
+# Expressões aritméticas simples
+3 + 4 * 5
+(10 + 20) / 3
+2 * (3 + 4) - 5
+100 - 50 / 2
+
+# Para gerador_codigo.c:
+# Atribuições com expressões
+x = a + b * 3;
+resultado = (p + q) * r - s;
+y = 10 + 20 * 30;
+
+# Para conversor_notacao.c:
+# Conversão infixa para pós-fixa
+a + b * c
+(a + b) * c
+(a + b) * (c - d)
+a * b + c * d
