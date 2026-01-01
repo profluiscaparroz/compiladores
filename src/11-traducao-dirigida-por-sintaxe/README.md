@@ -895,6 +895,10 @@ void parse_assignment() {
     instr.arg1 = addr;
     instr.arg2 = "";
     instr.result = id;
+    if (code_count >= MAX_INSTRUCTIONS) {
+        fprintf(stderr, "Erro: limite de instruções excedido\n");
+        exit(1);
+    }
     code[code_count++] = instr;
     
     if (current_token.type != TOKEN_SEMI) {
