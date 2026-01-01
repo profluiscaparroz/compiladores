@@ -210,6 +210,7 @@ ExprResult* translate_expression(ASTNode* node) {
             break;
             
         case NODE_BINARY_OP:
+            free(result);
             return translate_binary_op(node);
             
         default:
