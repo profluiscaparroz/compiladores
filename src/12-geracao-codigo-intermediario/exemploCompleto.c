@@ -142,7 +142,7 @@ ASTNode* create_node(NodeType type, char* value) {
 
 ASTNode* create_number(int value) {
     char buf[20];
-    sprintf(buf, "%d", value);
+    snprintf(buf, sizeof(buf), "%d", value);
     return create_node(NODE_NUMBER, buf);
 }
 
