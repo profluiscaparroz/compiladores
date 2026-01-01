@@ -712,6 +712,10 @@ char* new_temp() {
 }
 
 void emit(char op, char* arg1, char* arg2, char* result) {
+    if (code_count >= MAX_INSTRUCTIONS) {
+        fprintf(stderr, "Erro: limite de instruções excedido\n");
+        exit(1);
+    }
     code[code_count].op = op;
     code[code_count].arg1 = strdup(arg1);
     code[code_count].arg2 = strdup(arg2);

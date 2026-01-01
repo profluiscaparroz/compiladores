@@ -151,7 +151,7 @@ Token next_token() {
         tok.type = TOKEN_NUM;
         tok.value = 0;
         int i = 0;
-        while (isdigit(input[pos])) {
+        while (isdigit(input[pos]) && i < 30) {
             tok.lexeme[i++] = input[pos];
             tok.value = tok.value * 10 + (input[pos] - '0');
             pos++;
@@ -164,7 +164,7 @@ Token next_token() {
     if (isalpha(input[pos]) || input[pos] == '_') {
         tok.type = TOKEN_ID;
         int i = 0;
-        while (isalnum(input[pos]) || input[pos] == '_') {
+        while ((isalnum(input[pos]) || input[pos] == '_') && i < 30) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -207,14 +207,24 @@ char* parse_factor();
 char* parse_factor() {
     if (current_token.type == TOKEN_NUM) {
         // F → num { F.addr = num.lexeme }
-        char* addr = current_token.lexeme;
+        char* addr = malloc(32);
+        if (addr == NULL) {
+            fprintf(stderr, "Erro: falha ao alocar memória\n");
+            exit(1);
+        }
+        strcpy(addr, current_token.lexeme);
         advance();
         return addr;
     }
     
     if (current_token.type == TOKEN_ID) {
         // F → id { F.addr = id.lexeme }
-        char* addr = current_token.lexeme;
+        char* addr = malloc(32);
+        if (addr == NULL) {
+            fprintf(stderr, "Erro: falha ao alocar memória\n");
+            exit(1);
+        }
+        strcpy(addr, current_token.lexeme);
         advance();
         return addr;
     }
@@ -301,10 +311,6 @@ void parse_assignment() {
     }
     
     char id[32];
-    if (current_token.lexeme == NULL) {
-        fprintf(stderr, "Erro de memória: identificador nulo\n");
-        exit(1);
-    }
     strcpy(id, current_token.lexeme);
     advance();
     

@@ -96,7 +96,7 @@ Token next_token() {
     if (isdigit(input[pos])) {
         tok.type = TOKEN_NUM;
         int i = 0;
-        while (isdigit(input[pos])) {
+        while (isdigit(input[pos]) && i < 30) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -107,7 +107,7 @@ Token next_token() {
     if (isalpha(input[pos]) || input[pos] == '_') {
         tok.type = TOKEN_ID;
         int i = 0;
-        while (isalnum(input[pos]) || input[pos] == '_') {
+        while ((isalnum(input[pos]) || input[pos] == '_') && i < 30) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -239,6 +239,10 @@ int evaluate_postfix(const char* postfix) {
     while (token != NULL) {
         // Se é número, empilha
         if (isdigit(token[0])) {
+            if (top >= 99) {
+                fprintf(stderr, "Erro: pilha cheia\n");
+                return 0;
+            }
             stack[++top] = atoi(token);
         }
         // Se é operador, desempilha dois operandos e calcula
@@ -266,6 +270,10 @@ int evaluate_postfix(const char* postfix) {
                 default: result = 0;
             }
             
+            if (top >= 99) {
+                fprintf(stderr, "Erro: pilha cheia\n");
+                return 0;
+            }
             stack[++top] = result;
         }
         // Se é identificador, não pode avaliar

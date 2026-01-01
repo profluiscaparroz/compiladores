@@ -35,12 +35,21 @@ int code_count = 0;
 int temp_count = 0;
 
 void emit_code(const char* line) {
+    if (code_count >= MAX_CODE) {
+        fprintf(stderr, "Erro: número máximo de linhas de código (%d) excedido.\n", MAX_CODE);
+        exit(EXIT_FAILURE);
+    }
     strcpy(code_lines[code_count++], line);
 }
 
 char* new_temp() {
-    static char temp[10];
-    sprintf(temp, "t%d", temp_count++);
+    /* Allocate a fresh buffer for each temporary name to avoid reuse issues */
+    char *temp = (char *)malloc(16);
+    if (temp == NULL) {
+        fprintf(stderr, "Erro: falha ao alocar memória para temporário.\n");
+        exit(EXIT_FAILURE);
+    }
+    snprintf(temp, 16, "t%d", temp_count++);
     return temp;
 }
 
@@ -58,7 +67,7 @@ Token next_token() {
     if (isdigit(input[pos])) {
         tok.type = TOKEN_NUM;
         int i = 0;
-        while (isdigit(input[pos])) {
+        while (isdigit(input[pos]) && i < 30) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -68,7 +77,7 @@ Token next_token() {
     if (isalpha(input[pos]) || input[pos] == '_') {
         tok.type = TOKEN_ID;
         int i = 0;
-        while (isalnum(input[pos]) || input[pos] == '_') {
+        while ((isalnum(input[pos]) || input[pos] == '_') && i < 30) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -84,6 +93,11 @@ Token next_token() {
         case ')': tok.type = TOKEN_RPAREN; strcpy(tok.lexeme, ")"); break;
         case '=': tok.type = TOKEN_ASSIGN; strcpy(tok.lexeme, "="); break;
         case ';': tok.type = TOKEN_SEMI; strcpy(tok.lexeme, ";"); break;
+        default:
+            fprintf(stderr, "Erro léxico: caractere inválido '%c'\n", input[pos - 1]);
+            tok.type = TOKEN_EOF;
+            tok.lexeme[0] = '\0';
+            break;
     }
     
     return tok;
