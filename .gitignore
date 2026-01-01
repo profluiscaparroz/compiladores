@@ -29,5 +29,10 @@ testBinario
 # Automatos examples executables
 exemploAFD
 
+# SDT examples executables
+calculadora
+gerador_codigo
+conversor_notacao
+
 # CodeQL
 _codeql_detected_source_root
