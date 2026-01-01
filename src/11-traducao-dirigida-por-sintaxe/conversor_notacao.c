@@ -59,10 +59,20 @@ Token current_token;
 char postfix_output[MAX_OUTPUT];
 
 void append_postfix(const char* str) {
-    if (strlen(postfix_output) > 0) {
-        strcat(postfix_output, " ");
+    size_t len = strlen(postfix_output);
+
+    /* Adiciona espaço separador apenas se já houver algo e houver espaço suficiente */
+    if (len > 0 && len < MAX_OUTPUT - 1) {
+        postfix_output[len] = ' ';
+        postfix_output[len + 1] = '\0';
+        len++;
     }
-    strcat(postfix_output, str);
+
+    /* Calcula o espaço restante para o próximo token (inclui espaço para '\0') */
+    if (len < MAX_OUTPUT - 1) {
+        size_t remaining = MAX_OUTPUT - 1 - len;
+        strncat(postfix_output, str, remaining);
+    }
 }
 
 // ========== ANALISADOR LÉXICO ==========
