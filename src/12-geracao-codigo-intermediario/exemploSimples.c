@@ -35,8 +35,15 @@ char* new_temp() {
     if (temp == NULL) {
         fprintf(stderr, "Erro: falha ao alocar memória para temporário.\n");
         exit(EXIT_FAILURE);
+    /* Determine required buffer size for "t<temp_count>" (excluding '\0') */
+    int len = snprintf(NULL, 0, "t%d", temp_count);
+    char* temp = malloc((size_t)len + 1);
+    if (temp == NULL) {
+        /* In a small example program, exiting is a simple way to handle OOM */
+        fprintf(stderr, "Erro ao alocar memória para temporário.\n");
+        exit(EXIT_FAILURE);
     }
-    sprintf(temp, "t%d", temp_count++);
+    snprintf(temp, (size_t)len + 1, "t%d", temp_count++);
     return temp;
 }
 
