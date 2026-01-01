@@ -161,6 +161,9 @@ void print_tac() {
 
 ASTNode* create_node(NodeType type, char* value) {
     ASTNode* node = malloc(sizeof(ASTNode));
+    if (!node) {
+        return NULL;
+    }
     node->type = type;
     node->value = value ? my_strdup(value) : NULL;
     node->left = NULL;
