@@ -42,13 +42,21 @@ char* new_temp() {
         /* In a small example program, exiting is a simple way to handle OOM */
         fprintf(stderr, "Erro ao alocar memória para temporário.\n");
         exit(EXIT_FAILURE);
+    char* temp = malloc(10);
+    if (temp == NULL) {
+        fprintf(stderr, "Erro: falha ao alocar memória para temp.\n");
+        exit(EXIT_FAILURE);
     }
-    snprintf(temp, (size_t)len + 1, "t%d", temp_count++);
+    sprintf(temp, "t%d", temp_count++);
     return temp;
 }
 
 void emit(TACOp op, char* result, char* arg1, char* arg2) {
     TACInstr* instr = malloc(sizeof(TACInstr));
+    if (instr == NULL) {
+        fprintf(stderr, "Erro: falha ao alocar memória para instrução TAC.\n");
+        exit(EXIT_FAILURE);
+    }
     if (instr == NULL) {
         fprintf(stderr, "Erro: falha ao alocar memória para instrução TAC.\n");
         exit(EXIT_FAILURE);
