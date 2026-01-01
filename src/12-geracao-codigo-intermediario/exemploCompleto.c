@@ -62,11 +62,19 @@ char* new_temp() {
     sprintf(temp, "t%d", temp_count++);
     return temp;
 }
+    char* temp = malloc(10);
+    if (!temp) {
+        fprintf(stderr, "Erro: falha na alocação de memória em new_temp.\n");
+        exit(EXIT_FAILURE);
+    }
+    sprintf(temp, "t%d", temp_count++);
+    return temp;
+}
 
 char* new_label() {
     char* label = malloc(10);
     if (!label) {
-        fprintf(stderr, "Erro: falha na alocacao de memoria em new_label().\n");
+        fprintf(stderr, "Erro: falha na alocação de memória em new_label.\n");
         exit(EXIT_FAILURE);
     }
     sprintf(label, "L%d", label_count++);
@@ -75,6 +83,10 @@ char* new_label() {
 
 void emit(TACOp op, char* result, char* arg1, char* arg2) {
     TACInstr* instr = malloc(sizeof(TACInstr));
+    if (!instr) {
+        fprintf(stderr, "Erro: falha na alocação de memória em emit.\n");
+        exit(EXIT_FAILURE);
+    }
     if (!instr) {
         fprintf(stderr, "Erro: falha na alocacao de memoria em emit().\n");
         exit(EXIT_FAILURE);
