@@ -202,14 +202,14 @@ char* parse_factor();
 char* parse_factor() {
     if (current_token.type == TOKEN_NUM) {
         // F → num { F.addr = num.lexeme }
-        char* addr = strdup(current_token.lexeme);
+        char* addr = current_token.lexeme;
         advance();
         return addr;
     }
     
     if (current_token.type == TOKEN_ID) {
         // F → id { F.addr = id.lexeme }
-        char* addr = strdup(current_token.lexeme);
+        char* addr = current_token.lexeme;
         advance();
         return addr;
     }
