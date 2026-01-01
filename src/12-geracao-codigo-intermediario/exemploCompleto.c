@@ -212,12 +212,20 @@ ExprResult* translate_binary_op(ASTNode* node) {
     emit(op, temp, left->place, right->place);
     
     ExprResult* result = malloc(sizeof(ExprResult));
+    if (!result) {
+        fprintf(stderr, "Erro de alocacao de memoria\n");
+        exit(1);
+    }
     result->place = temp;
     return result;
 }
 
 ExprResult* translate_expression(ASTNode* node) {
     ExprResult* result = malloc(sizeof(ExprResult));
+    if (!result) {
+        fprintf(stderr, "Erro de alocacao de memoria\n");
+        exit(1);
+    }
     
     switch (node->type) {
         case NODE_NUMBER:
