@@ -56,6 +56,8 @@ Token current_token;
 
 // ========== BUFFER PARA SAÍDA PÓS-FIXA ==========
 #define MAX_OUTPUT 256
+#define STACK_SIZE 100
+
 char postfix_output[MAX_OUTPUT];
 
 void append_postfix(const char* str) {
@@ -96,7 +98,7 @@ Token next_token() {
     if (isdigit(input[pos])) {
         tok.type = TOKEN_NUM;
         int i = 0;
-        while (isdigit(input[pos]) && i < 30) {
+        while (isdigit(input[pos]) && i < 31) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -107,7 +109,7 @@ Token next_token() {
     if (isalpha(input[pos]) || input[pos] == '_') {
         tok.type = TOKEN_ID;
         int i = 0;
-        while ((isalnum(input[pos]) || input[pos] == '_') && i < 30) {
+        while ((isalnum(input[pos]) || input[pos] == '_') && i < 31) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -228,7 +230,7 @@ void parse_expr() {
 // ========== AVALIADOR DE NOTAÇÃO PÓS-FIXA ==========
 
 int evaluate_postfix(const char* postfix) {
-    int stack[100];
+    int stack[STACK_SIZE];
     int top = -1;
     
     char expr[MAX_OUTPUT];
@@ -239,7 +241,7 @@ int evaluate_postfix(const char* postfix) {
     while (token != NULL) {
         // Se é número, empilha
         if (isdigit(token[0])) {
-            if (top + 1 >= 100) {
+            if (top + 1 >= STACK_SIZE) {
                 fprintf(stderr, "Erro: pilha cheia\n");
                 return 0;
             }
@@ -270,7 +272,7 @@ int evaluate_postfix(const char* postfix) {
                 default: result = 0;
             }
             
-            if (top + 1 >= 100) {
+            if (top + 1 >= STACK_SIZE) {
                 fprintf(stderr, "Erro: pilha cheia\n");
                 return 0;
             }
