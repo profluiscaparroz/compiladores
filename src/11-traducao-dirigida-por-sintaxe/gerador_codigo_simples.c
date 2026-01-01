@@ -98,6 +98,11 @@ Token next_token() {
             tok.type = TOKEN_EOF;
             tok.lexeme[0] = '\0';
             break;
+        default:
+            fprintf(stderr, "Erro léxico: caractere inválido '%c'\n", input[pos - 1]);
+            tok.type = TOKEN_EOF;
+            tok.lexeme[0] = '\0';
+            break;
     }
     
     return tok;
