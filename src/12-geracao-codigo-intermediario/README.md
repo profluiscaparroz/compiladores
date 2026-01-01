@@ -591,7 +591,7 @@ L3:
 ```
 src/12-geracao-codigo-intermediario/
 ├── exemploSimples.c        # Gerador básico de TAC
-├── exemploCompleto.c       # Gerador completo (a ser criado)
+├── exemploCompleto.c       # Gerador completo de TAC
 └── README.md               # Este arquivo
 ```
 
