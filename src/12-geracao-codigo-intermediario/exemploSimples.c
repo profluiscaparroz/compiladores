@@ -32,12 +32,20 @@ int temp_count = 0;
 
 char* new_temp() {
     char* temp = malloc(10);
+    if (temp == NULL) {
+        fprintf(stderr, "Erro: falha ao alocar memória para temporário.\n");
+        exit(EXIT_FAILURE);
+    }
     sprintf(temp, "t%d", temp_count++);
     return temp;
 }
 
 void emit(TACOp op, char* result, char* arg1, char* arg2) {
     TACInstr* instr = malloc(sizeof(TACInstr));
+    if (instr == NULL) {
+        fprintf(stderr, "Erro: falha ao alocar memória para instrução TAC.\n");
+        exit(EXIT_FAILURE);
+    }
     instr->op = op;
     instr->result = result;
     instr->arg1 = arg1;
