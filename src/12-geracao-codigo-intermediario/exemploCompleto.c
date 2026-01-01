@@ -55,18 +55,30 @@ int label_count = 0;
 
 char* new_temp() {
     char* temp = malloc(10);
+    if (!temp) {
+        fprintf(stderr, "Erro: falha na alocacao de memoria em new_temp().\n");
+        exit(EXIT_FAILURE);
+    }
     sprintf(temp, "t%d", temp_count++);
     return temp;
 }
 
 char* new_label() {
     char* label = malloc(10);
+    if (!label) {
+        fprintf(stderr, "Erro: falha na alocacao de memoria em new_label().\n");
+        exit(EXIT_FAILURE);
+    }
     sprintf(label, "L%d", label_count++);
     return label;
 }
 
 void emit(TACOp op, char* result, char* arg1, char* arg2) {
     TACInstr* instr = malloc(sizeof(TACInstr));
+    if (!instr) {
+        fprintf(stderr, "Erro: falha na alocacao de memoria em emit().\n");
+        exit(EXIT_FAILURE);
+    }
     instr->op = op;
     instr->result = result;
     instr->arg1 = arg1;
