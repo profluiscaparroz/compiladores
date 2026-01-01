@@ -55,46 +55,18 @@ int label_count = 0;
 
 char* new_temp() {
     char* temp = malloc(10);
-    if (!temp) {
-        fprintf(stderr, "Erro: falha na alocacao de memoria em new_temp().\n");
-        exit(EXIT_FAILURE);
-    }
-    sprintf(temp, "t%d", temp_count++);
-    return temp;
-}
-    char* temp = malloc(10);
-    if (!temp) {
-        fprintf(stderr, "Erro: falha na alocação de memória em new_temp.\n");
-        exit(EXIT_FAILURE);
-    }
     sprintf(temp, "t%d", temp_count++);
     return temp;
 }
 
 char* new_label() {
     char* label = malloc(10);
-    if (!label) {
-        fprintf(stderr, "Erro: falha na alocação de memória em new_label.\n");
-        exit(EXIT_FAILURE);
-    }
     sprintf(label, "L%d", label_count++);
     return label;
 }
 
 void emit(TACOp op, char* result, char* arg1, char* arg2) {
     TACInstr* instr = malloc(sizeof(TACInstr));
-    if (!instr) {
-        fprintf(stderr, "Erro: falha ao alocar memória para TACInstr.\n");
-        exit(EXIT_FAILURE);
-    }
-    if (!instr) {
-        fprintf(stderr, "Erro: falha na alocação de memória em emit.\n");
-        exit(EXIT_FAILURE);
-    }
-    if (!instr) {
-        fprintf(stderr, "Erro: falha na alocacao de memoria em emit().\n");
-        exit(EXIT_FAILURE);
-    }
     instr->op = op;
     instr->result = result;
     instr->arg1 = arg1;
@@ -161,9 +133,6 @@ void print_tac() {
 
 ASTNode* create_node(NodeType type, char* value) {
     ASTNode* node = malloc(sizeof(ASTNode));
-    if (!node) {
-        return NULL;
-    }
     node->type = type;
     node->value = value ? my_strdup(value) : NULL;
     node->left = NULL;
@@ -173,7 +142,7 @@ ASTNode* create_node(NodeType type, char* value) {
 
 ASTNode* create_number(int value) {
     char buf[20];
-    snprintf(buf, sizeof(buf), "%d", value);
+    sprintf(buf, "%d", value);
     return create_node(NODE_NUMBER, buf);
 }
 
@@ -212,20 +181,12 @@ ExprResult* translate_binary_op(ASTNode* node) {
     emit(op, temp, left->place, right->place);
     
     ExprResult* result = malloc(sizeof(ExprResult));
-    if (!result) {
-        fprintf(stderr, "Erro de alocacao de memoria\n");
-        exit(1);
-    }
     result->place = temp;
     return result;
 }
 
 ExprResult* translate_expression(ASTNode* node) {
     ExprResult* result = malloc(sizeof(ExprResult));
-    if (!result) {
-        fprintf(stderr, "Erro de alocacao de memoria\n");
-        exit(1);
-    }
     
     switch (node->type) {
         case NODE_NUMBER:
@@ -237,7 +198,6 @@ ExprResult* translate_expression(ASTNode* node) {
             break;
             
         case NODE_BINARY_OP:
-            free(result);
             return translate_binary_op(node);
             
         default:
@@ -285,16 +245,7 @@ ExprResult* optimize_constant_folding(ASTNode* node) {
                    val1, node->value, val2, result_val);
             
             ExprResult* result = malloc(sizeof(ExprResult));
-            if (!result) {
-                /* Falha na alocação: volta para a tradução normal (sem otimização) */
-                return translate_expression(node);
-            }
             result->place = malloc(20);
-            if (!result->place) {
-                /* Falha na alocação do buffer: evita leak e volta para a tradução normal */
-                free(result);
-                return translate_expression(node);
-            }
             sprintf(result->place, "%d", result_val);
             return result;
         }
@@ -305,6 +256,14 @@ ExprResult* optimize_constant_folding(ASTNode* node) {
 
 // ========== COMANDOS DE CONTROLE ==========
 
+/*
+ * generate_if_then: Gera código TAC para comando if-then
+ * 
+ * NOTA: Esta função é apenas para demonstração. Os valores "0" hardcoded
+ * na comparação são específicos para os exemplos deste programa educacional.
+ * Em um compilador real, a condição seria traduzida completamente e os
+ * valores de comparação viriam da expressão condicional.
+ */
 void generate_if_then(ASTNode* cond, ASTNode* then_body) {
     char* L_then = new_label();
     char* L_end = new_label();
@@ -320,6 +279,14 @@ void generate_if_then(ASTNode* cond, ASTNode* then_body) {
     emit(TAC_LABEL, L_end, NULL, NULL);
 }
 
+/*
+ * generate_while_loop: Gera código TAC para loop while
+ * 
+ * NOTA: Esta função é apenas para demonstração. O valor "10" hardcoded
+ * na comparação é específico para o exemplo deste programa educacional.
+ * Em um compilador real, a condição seria traduzida completamente e os
+ * valores de comparação viriam da expressão condicional.
+ */
 void generate_while_loop(ASTNode* cond, ASTNode* body) {
     char* L_start = new_label();
     char* L_body = new_label();
