@@ -67,7 +67,7 @@ Token next_token() {
     if (isdigit(input[pos])) {
         tok.type = TOKEN_NUM;
         int i = 0;
-        while (isdigit(input[pos]) && i < 30) {
+        while (isdigit(input[pos]) && i < 31) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';
@@ -77,7 +77,7 @@ Token next_token() {
     if (isalpha(input[pos]) || input[pos] == '_') {
         tok.type = TOKEN_ID;
         int i = 0;
-        while ((isalnum(input[pos]) || input[pos] == '_') && i < 30) {
+        while ((isalnum(input[pos]) || input[pos] == '_') && i < 31) {
             tok.lexeme[i++] = input[pos++];
         }
         tok.lexeme[i] = '\0';

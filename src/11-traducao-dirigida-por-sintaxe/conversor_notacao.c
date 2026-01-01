@@ -239,7 +239,7 @@ int evaluate_postfix(const char* postfix) {
     while (token != NULL) {
         // Se é número, empilha
         if (isdigit(token[0])) {
-            if (top >= 99) {
+            if (top + 1 >= 100) {
                 fprintf(stderr, "Erro: pilha cheia\n");
                 return 0;
             }
@@ -270,7 +270,7 @@ int evaluate_postfix(const char* postfix) {
                 default: result = 0;
             }
             
-            if (top >= 99) {
+            if (top + 1 >= 100) {
                 fprintf(stderr, "Erro: pilha cheia\n");
                 return 0;
             }
