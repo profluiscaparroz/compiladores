@@ -301,6 +301,10 @@ void parse_assignment() {
     }
     
     char id[32];
+    if (current_token.lexeme == NULL) {
+        fprintf(stderr, "Erro de memória: identificador nulo\n");
+        exit(1);
+    }
     strcpy(id, current_token.lexeme);
     advance();
     
