@@ -270,7 +270,16 @@ ExprResult* optimize_constant_folding(ASTNode* node) {
                    val1, node->value, val2, result_val);
             
             ExprResult* result = malloc(sizeof(ExprResult));
+            if (!result) {
+                /* Falha na alocação: volta para a tradução normal (sem otimização) */
+                return translate_expression(node);
+            }
             result->place = malloc(20);
+            if (!result->place) {
+                /* Falha na alocação do buffer: evita leak e volta para a tradução normal */
+                free(result);
+                return translate_expression(node);
+            }
             sprintf(result->place, "%d", result_val);
             return result;
         }
