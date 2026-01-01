@@ -64,8 +64,13 @@ int temp_count = 0;
  * Retorna: nome do temporário (ex: "t0", "t1", ...)
  */
 char* new_temp() {
-    static char temp[10];
-    sprintf(temp, "t%d", temp_count++);
+    /* Aloca um novo buffer para cada temporário para evitar sobrescrever um buffer estático */
+    char *temp = malloc(16);
+    if (temp == NULL) {
+        fprintf(stderr, "Erro: falha ao alocar memória para temporário\n");
+        exit(1);
+    }
+    snprintf(temp, 16, "t%d", temp_count++);
     return temp;
 }
 
