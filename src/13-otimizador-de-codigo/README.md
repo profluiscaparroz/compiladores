@@ -258,7 +258,7 @@ x = *p;  // x pode ser 10 ou 20?
 **Análise de aliasing**:
 - **May-alias**: Podem apontar para mesmo local (conservador)
 - **Must-alias**: Sempre apontam para mesmo local
-- **Anderssen (1994)**: Análise baseada em inclusão de conjuntos
+- **Andersen (1994)**: Análise baseada em inclusão de conjuntos
 
 **Impacto**: Aliasing conservador impede otimizações agressivas.
 
