@@ -946,10 +946,25 @@ int code_size = 0;
 
 // Função auxiliar: verificar se é constante
 bool is_number(const char* str) {
-    if (!str || strlen(str) == 0) return false;
-    for (int i = 0; str[i]; i++) {
+    if (!str) return false;
+
+    size_t len = strlen(str);
+    if (len == 0) return false;
+
+    int start = 0;
+    // Permite um sinal de menos apenas na primeira posição,
+    // mas exige pelo menos um dígito após o sinal.
+    if (str[0] == '-') {
+        if (len == 1) {
+            // String "-" sozinha não é um número válido
+            return false;
+        }
+        start = 1;
+    }
+
+    for (int i = start; str[i]; i++) {
         if (str[i] < '0' || str[i] > '9') {
-            if (!(i == 0 && str[i] == '-')) return false;
+            return false;
         }
     }
     return true;
@@ -1001,29 +1016,29 @@ void copy_propagation() {
         if (code[i].op == '=' && !is_number(code[i].arg1) && 
             code[i].arg2[0] == '\0') {
             
-            char* var = code[i].dest;
+            char* dest_var = code[i].dest;
             char* value = code[i].arg1;
             
             // Propagar para instruções seguintes
             for (int j = i + 1; j < code_size; j++) {
                 bool changed = false;
                 
-                if (strcmp(code[j].arg1, var) == 0) {
+                if (strcmp(code[j].arg1, dest_var) == 0) {
                     strcpy(code[j].arg1, value);
                     changed = true;
                 }
-                if (strcmp(code[j].arg2, var) == 0) {
+                if (strcmp(code[j].arg2, dest_var) == 0) {
                     strcpy(code[j].arg2, value);
                     changed = true;
                 }
                 
                 if (changed) {
-                    printf("  [%d->%d] Propagar %s → %s\n", i, j, var, value);
+                    printf("  [%d->%d] Propagar %s → %s\n", i, j, dest_var, value);
                     count++;
                 }
                 
                 // Parar se variável for redefinida
-                if (strcmp(code[j].dest, var) == 0 || 
+                if (strcmp(code[j].dest, dest_var) == 0 || 
                     strcmp(code[j].dest, value) == 0) {
                     break;
                 }
@@ -1039,6 +1054,14 @@ void dead_code_elimination() {
     printf("\n=== DEAD CODE ELIMINATION ===\n");
     
     bool used[MAX_CODE_SIZE] = {false};
+    
+    // Marcar última instrução com destino como viva (saída do programa)
+    for (int i = code_size - 1; i >= 0; i--) {
+        if (code[i].dest[0] != '\0') {
+            used[i] = true;
+            break;
+        }
+    }
     
     // Marcar variáveis usadas (análise simples)
     for (int i = 0; i < code_size; i++) {
@@ -1161,14 +1184,13 @@ Expressões dobradas: 2
 
 === COPY PROPAGATION ===
   [0->1] Propagar t1 → 7
-  [0->2] Propagar t1 → 7
-  [2->4] Propagar x → 7
+  [2->4] Propagar x → t2
   [3->4] Propagar y → 8
-Propagações realizadas: 4
+Propagações realizadas: 3
 
 === CONSTANT FOLDING ===
   [1] t2 = 7 * 2 => t2 = 14
-  [4] z = 7 + 8 => z = 15
+  [4] z = 14 + 8 => z = 22
 Expressões dobradas: 2
 
 === DEAD CODE ELIMINATION ===
@@ -1180,7 +1202,7 @@ Instruções mortas: 4
 
 ═══ CÓDIGO OTIMIZADO ═══
 ──────────────────────────────────
-[ 4] z = 15
+[ 4] z = 22
 ──────────────────────────────────
 
 ✓ Otimização concluída!
@@ -1287,9 +1309,6 @@ gcc otimizador_simples.c -o otimizador -std=c99 -g -Wall
 ```bash
 # Executar
 ./otimizador
-
-# Ver estatísticas
-./otimizador --verbose
 
 # Salvar saída
 ./otimizador > resultado.txt
