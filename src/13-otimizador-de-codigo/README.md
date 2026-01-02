@@ -1216,7 +1216,7 @@ t1 = 7
 t2 = 7 * 2
 x = t2
 y = 8
-z = 14 + 8
+z = x + y
 ```
 
 **Passo 3 - Constant Folding (segunda passagem)**:
